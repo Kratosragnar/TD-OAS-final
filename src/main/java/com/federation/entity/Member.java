@@ -76,4 +76,8 @@ public class Member {
         if (joinDate == null) return 0;
         return (int) java.time.temporal.ChronoUnit.DAYS.between(joinDate, LocalDate.now());
     }
+
+    public Object getFullName() {
+        return null;
+    }
 }

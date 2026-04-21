@@ -6,6 +6,7 @@ import com.federation.entity.Collectivity;
 import com.federation.entity.Mandate;
 import com.federation.entity.Member;
 import com.federation.entity.Role;
+import com.federation.enums.CollectivityStatus;
 import com.federation.exception.BusinessException;
 import com.federation.exception.ResourceNotFoundException;
 import com.federation.mapper.CollectivityMapper;

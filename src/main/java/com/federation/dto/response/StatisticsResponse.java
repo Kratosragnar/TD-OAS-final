@@ -11,12 +11,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class StatisticsResponse {
+/**
+ * Classe conteneur pour les réponses de statistiques.
+ * Ne pas instancier directement - utiliser les classes internes statiques.
+ */
+public final class StatisticsResponse {
 
+    // Constructeur privé pour empêcher l'instanciation
+    private StatisticsResponse() {
+        throw new UnsupportedOperationException("Cette classe ne peut pas être instanciée");
+    }
+
+    // ========== CLASSE INTERNE : CollectivityStats ==========
     @Data
     @Builder
     @NoArgsConstructor
@@ -37,6 +43,7 @@ public class StatisticsResponse {
         private List<MemberStats> topContributors;
     }
 
+    // ========== CLASSE INTERNE : MemberStats ==========
     @Data
     @Builder
     @NoArgsConstructor
@@ -55,6 +62,7 @@ public class StatisticsResponse {
         private Map<String, BigDecimal> paymentsByMonth;
     }
 
+    // ========== CLASSE INTERNE : MandateHistory ==========
     @Data
     @Builder
     @NoArgsConstructor
