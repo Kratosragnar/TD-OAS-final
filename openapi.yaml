@@ -5,19 +5,8 @@ info:
   description: |
     API de gestion d'une fédération agricole nationale.
     
-    ## Fonctionnalités
-    - Gestion des collectivités
-    - Gestion des membres
-    - Gestion des rôles et mandats
-    - Gestion financière (comptes et paiements)
-    - Gestion des activités
-    - Gestion des présences
-    - Calcul des statistiques
+
     
-    ## Règles métier
-    - Création collectivité : minimum 10 membres, ancienneté ≥ 6 mois, postes remplis
-    - Admission membre : parrain ≥ 90 jours, paiement 50 000 MGA, informations complètes
-    - Caisse unique par collectivité
 
   contact:
     name: Fédération Agricole
@@ -168,7 +157,7 @@ paths:
         '404':
           description: Collectivité non trouvée
 
-  # ========== MEMBRES ==========
+
   /members:
     post:
       tags:
@@ -295,7 +284,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/MemberResponse'
 
-  # ========== PAIEMENTS ==========
+
   /payments:
     post:
       tags:
@@ -378,7 +367,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/PaymentResponse'
 
-  # ========== COMPTES ==========
   /accounts:
     post:
       tags:
@@ -446,7 +434,7 @@ paths:
         '404':
           description: Compte non trouvé
 
-  # ========== ACTIVITÉS ==========
+
   /activities:
     post:
       tags:
@@ -495,7 +483,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/ActivityResponse'
 
-  # ========== PRÉSENCES ==========
+
   /attendances:
     post:
       tags:
@@ -544,7 +532,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/AttendanceResponse'
 
-  # ========== STATISTIQUES ==========
+
   /statistics/collectivities/{id}:
     get:
       tags:
@@ -589,7 +577,7 @@ paths:
 
 components:
   schemas:
-    # ========== ENUMS ==========
+ 
     CollectivityStatus:
       type: string
       enum: [PENDING, ACTIVE, SUSPENDED]
@@ -796,7 +784,7 @@ components:
           type: string
           example: null
 
-    # ========== RESPONSES ==========
+  
     CollectivityResponse:
       type: object
       properties:
