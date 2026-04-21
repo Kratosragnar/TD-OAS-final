@@ -3,9 +3,9 @@ spring:
     name: federation-api
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/federation_db
+    url: jdbc:postgresql://localhost:5432/springboot
     username: postgres
-    password: postgres
+    password: 12345678
     driver-class-name: org.postgresql.Driver
 
   jpa:
