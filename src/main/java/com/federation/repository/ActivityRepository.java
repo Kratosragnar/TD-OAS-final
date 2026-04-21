@@ -29,4 +29,6 @@ public interface ActivityRepository extends JpaRepository<Activity, UUID> {
 
     @Query("SELECT COUNT(a) FROM Activity a WHERE a.collectivity.id = :collectivityId")
     Long countActivitiesByCollectivityId(@Param("collectivityId") UUID collectivityId);
+    @Query("SELECT COUNT(a) FROM Activity a WHERE a.collectivity.id = :collectivityId AND a.type = :type")
+    Long countByCollectivityIdAndType(@Param("collectivityId") UUID collectivityId, @Param("type") ActivityType type);
 }

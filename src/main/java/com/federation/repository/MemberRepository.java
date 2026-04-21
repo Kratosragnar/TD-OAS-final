@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -33,4 +34,23 @@ public interface MemberRepository extends JpaRepository<Member, UUID> {
 
     @Query("SELECT COALESCE(SUM(p.amount), 0) FROM Member m JOIN m.payments p WHERE m.id = :memberId")
     java.math.BigDecimal sumPaymentsByMemberId(@Param("memberId") UUID memberId);
+
+    // Nouvelles méthodes pour les statistiques
+    @Query("SELECT COUNT(m) FROM Member m WHERE m.collectivity.id = :collectivityId")
+    Long countByCollectivityId(@Param("collectivityId") UUID collectivityId);
+
+    @Query("SELECT COUNT(m) FROM Member m WHERE m.collectivity.id = :collectivityId AND m.status = :status")
+    Long countByCollectivityIdAndStatus(@Param("collectivityId") UUID collectivityId, @Param("status") MemberStatus status);
+
+    // Recherche avec fetch des relations pour éviter LazyInitializationException
+    @Query("SELECT m FROM Member m LEFT JOIN FETCH m.collectivity LEFT JOIN FETCH m.sponsor WHERE m.id = :id")
+    Optional<Member> findByIdWithRelations(@Param("id") UUID id);
+
+    // Vérifier si un email existe déjà (hors membre courant)
+    @Query("SELECT COUNT(m) > 0 FROM Member m WHERE m.email = :email AND (:excludeId IS NULL OR m.id != :excludeId)")
+    boolean existsByEmailAndIdNot(@Param("email") String email, @Param("excludeId") UUID excludeId);
+
+    // Vérifier si un téléphone existe déjà (hors membre courant)
+    @Query("SELECT COUNT(m) > 0 FROM Member m WHERE m.phone = :phone AND (:excludeId IS NULL OR m.id != :excludeId)")
+    boolean existsByPhoneAndIdNot(@Param("phone") String phone, @Param("excludeId") UUID excludeId);
 }

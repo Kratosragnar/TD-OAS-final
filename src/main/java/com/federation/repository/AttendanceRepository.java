@@ -36,4 +36,9 @@ public interface AttendanceRepository extends JpaRepository<Attendance, UUID> {
     Long countPresentByActivityId(@Param("activityId") UUID activityId);
 
     boolean existsByActivityIdAndMemberId(UUID activityId, UUID memberId);
+    @Query("SELECT COUNT(a) FROM Attendance a WHERE a.member.id = :memberId")
+    Long countByMemberId(@Param("memberId") UUID memberId);
+
+    @Query("SELECT a.activity.id, COUNT(a) as total, SUM(CASE WHEN a.present = true THEN 1 ELSE 0 END) as present FROM Attendance a WHERE a.activity.collectivity.id = :collectivityId GROUP BY a.activity.id")
+    List<Object[]> findAttendanceRatesByCollectivityId(@Param("collectivityId") UUID collectivityId);
 }

@@ -39,4 +39,6 @@ public interface PaymentRepository extends JpaRepository<Payment, UUID> {
 
     @Query("SELECT COUNT(p) FROM Payment p WHERE p.member.id = :memberId")
     Long countPaymentsByMemberId(@Param("memberId") UUID memberId);
+    @Query("SELECT p FROM Payment p WHERE p.account.collectivity.id = :collectivityId")
+    List<Payment> findByCollectivityId(@Param("collectivityId") UUID collectivityId);
 }
