@@ -1,18 +1,27 @@
 openapi: 3.0.0
 info:
   title: Federation API
-  version: 1.0.0
+  version: 1.1.0
   description: |
     API de gestion d'une fédération agricole nationale.
     
-
+    ## Évolutions du 21/04/2026
+    - Parrainage multiple (≥ 2 parrains confirmés) avec nature de la relation
+    - Condition de majorité des parrains issus de la collectivité cible
+    - Paiement obligatoire des frais d'adhésion + cotisations annuelles de la collectivité
+    - Statistiques fédérales : assiduité, membres à jour, nouveaux adhérents
     
+    ## Évolutions du 22/04/2026
+    - Attribution d'un numéro et d'un nom unique à une collectivité par la fédération (endpoint J)
+
+    ## Règles métier
+    - Création collectivité : minimum 10 membres, ancienneté ≥ 6 mois, postes remplis
+    - Admission membre : ≥ 2 parrains confirmés, majorité de la collectivité cible, paiement 50 000 MGA + cotisation annuelle
+    - Caisse unique par collectivité
 
   contact:
     name: Fédération Agricole
     email: contact@federation-agricole.mg
-    url: https://federation-agricole.mg
-
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
@@ -37,7 +46,9 @@ tags:
   - name: Présences
     description: Gestion des présences aux activités
   - name: Statistiques
-    description: Calcul des statistiques
+    description: Calcul des statistiques (collectivité et membre)
+  - name: Statistiques Fédérales
+    description: Statistiques globales de la fédération
 
 paths:
   # ========== COLLECTIVITÉS ==========
@@ -58,17 +69,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CollectivityRequest'
-            example:
-              name: "Collectivité d'Antananarivo"
-              city: "Antananarivo"
-              specialty: "Riziculture"
-              creationDate: "2024-01-15"
-              foundingMembers:
-                - memberId: "550e8400-e29b-41d4-a716-446655440000"
-                - memberId: "550e8400-e29b-41d4-a716-446655440001"
-              mandates:
-                - memberId: "550e8400-e29b-41d4-a716-446655440000"
-                  roleId: "660e8400-e29b-41d4-a716-446655440000"
       responses:
         '201':
           description: Collectivité créée avec succès
@@ -133,10 +133,6 @@ paths:
                 $ref: '#/components/schemas/CollectivityResponse'
         '404':
           description: Collectivité non trouvée
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
 
   /collectivities/{id}/validate:
     post:
@@ -157,12 +153,51 @@ paths:
         '404':
           description: Collectivité non trouvée
 
+  # NOUVEAU ENDPOINT J
+  /collectivities/{id}/assign-identity:
+    patch:
+      tags:
+        - Collectivités
+      summary: Attribuer un numéro et un nom unique à une collectivité (fonctionnalité J)
+      description: |
+        La fédération attribue manuellement un numéro et un nom uniques à une collectivité existante.
+        Ces champs sont immuables une fois attribués. Une erreur 400 est retournée si on tente de les modifier.
+      operationId: assignCollectivityIdentity
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignIdentityRequest'
+      responses:
+        '200':
+          description: Numéro et nom attribués avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectivityResponse'
+        '400':
+          description: Données invalides ou déjà attribuées
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Collectivité non trouvée
 
+  # ========== MEMBRES ==========
   /members:
     post:
       tags:
         - Membres
-      summary: Créer un membre
+      summary: Créer un membre (candidat)
       operationId: createMember
       requestBody:
         required: true
@@ -170,15 +205,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/MemberRequest'
-            example:
-              firstName: "Jean"
-              lastName: "Rakoto"
-              birthDate: "1990-05-20"
-              email: "jean.rakoto@email.com"
-              phone: "0341234567"
-              address: "Lot 123, Antananarivo"
-              collectivityId: "550e8400-e29b-41d4-a716-446655440000"
-              sponsorId: "550e8400-e29b-41d4-a716-446655440001"
       responses:
         '201':
           description: Membre créé avec succès
@@ -197,11 +223,12 @@ paths:
     post:
       tags:
         - Membres
-      summary: Faire adhérer un membre
+      summary: Faire adhérer un membre (validation des conditions B-2)
       description: |
-        Conditions requises :
-        - Parrain confirmé (≥ 90 jours d'ancienneté)
-        - Paiement de 50 000 MGA effectué
+        Nouvelles conditions (21/04/2026) :
+        - Être parrainé par au moins deux membres confirmés (≥ 90 jours d'ancienneté et actifs)
+        - Le nombre de parrains issus de la collectivité cible doit être ≥ au nombre de parrains d'autres collectivités
+        - Paiement des frais d'adhésion (50 000 MGA) + cotisation annuelle de la collectivité
         - Informations personnelles complètes
       operationId: joinMember
       parameters:
@@ -251,8 +278,6 @@ paths:
                   type: string
                   format: uuid
                   description: ID de la nouvelle collectivité
-            example:
-              collectivityId: "550e8400-e29b-41d4-a716-446655440002"
       responses:
         '200':
           description: Transfert réussi
@@ -284,7 +309,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/MemberResponse'
 
-
+  # ========== PAIEMENTS ==========
   /payments:
     post:
       tags:
@@ -297,14 +322,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PaymentRequest'
-            example:
-              memberId: "550e8400-e29b-41d4-a716-446655440000"
-              accountId: "770e8400-e29b-41d4-a716-446655440000"
-              amount: 50000
-              type: "MONTHLY"
-              paymentDate: "2024-03-15"
-              reference: "PAY-2024-001"
-              description: "Cotisation mensuelle mars 2024"
       responses:
         '201':
           description: Paiement enregistré
@@ -367,6 +384,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/PaymentResponse'
 
+  # ========== COMPTES ==========
   /accounts:
     post:
       tags:
@@ -382,10 +400,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/AccountRequest'
-            example:
-              name: "Caisse Principale"
-              type: "CASH"
-              collectivityId: "550e8400-e29b-41d4-a716-446655440000"
       responses:
         '201':
           description: Compte créé
@@ -394,7 +408,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/AccountResponse'
         '400':
-          description: Erreur (ex: caisse déjà existante)
+          description: "Erreur (ex: caisse déjà existante)"
 
     get:
       tags:
@@ -434,13 +448,13 @@ paths:
         '404':
           description: Compte non trouvé
 
-
+  # ========== ACTIVITÉS ==========
   /activities:
     post:
       tags:
         - Activités
       summary: Créer une activité
-      description: Types disponibles : MANDATORY, EXCEPTIONAL
+      description: "Types disponibles : MANDATORY, EXCEPTIONAL"
       operationId: createActivity
       requestBody:
         required: true
@@ -448,12 +462,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ActivityRequest'
-            example:
-              title: "Assemblée Générale"
-              description: "Assemblée générale annuelle"
-              activityDate: "2024-06-15T14:00:00"
-              type: "MANDATORY"
-              collectivityId: "550e8400-e29b-41d4-a716-446655440000"
       responses:
         '201':
           description: Activité créée
@@ -483,7 +491,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/ActivityResponse'
 
-
+  # ========== PRÉSENCES ==========
   /attendances:
     post:
       tags:
@@ -496,11 +504,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/AttendanceRequest'
-            example:
-              activityId: "880e8400-e29b-41d4-a716-446655440000"
-              memberId: "550e8400-e29b-41d4-a716-446655440000"
-              present: true
-              justification: null
       responses:
         '201':
           description: Présence enregistrée
@@ -532,7 +535,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/AttendanceResponse'
 
-
+  # ========== STATISTIQUES COLLECTIVITÉS & MEMBRES ==========
   /statistics/collectivities/{id}:
     get:
       tags:
@@ -575,9 +578,94 @@ paths:
               schema:
                 $ref: '#/components/schemas/MemberStats'
 
+  # ========== STATISTIQUES FÉDÉRALES (NOUVEAU H) ==========
+  /statistics/federation/attendance-rate:
+    get:
+      tags:
+        - Statistiques Fédérales
+      summary: Taux d'assiduité global par collectivité sur une période donnée
+      operationId: getFederationAttendanceRate
+      parameters:
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          description: Date de début (format YYYY-MM-DD)
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          description: Date de fin (format YYYY-MM-DD)
+      responses:
+        '200':
+          description: Taux d'assiduité par collectivité
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CollectivityAttendanceRate'
+
+  /statistics/federation/up-to-date-members:
+    get:
+      tags:
+        - Statistiques Fédérales
+      summary: Pourcentage de membres à jour de cotisation par collectivité
+      operationId: getUpToDateMembersPercentage
+      parameters:
+        - name: referenceDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          description: Date de référence pour vérifier les cotisations à jour
+      responses:
+        '200':
+          description: Pourcentage de membres à jour par collectivité
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CollectivityPaymentStatus'
+
+  /statistics/federation/new-members:
+    get:
+      tags:
+        - Statistiques Fédérales
+      summary: Nombre de nouveaux adhérents par collectivité sur une période donnée
+      operationId: getNewMembersCount
+      parameters:
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Nombre de nouveaux adhérents par collectivité
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CollectivityNewMembers'
+
 components:
   schemas:
- 
+    # ========== ENUMS ==========
     CollectivityStatus:
       type: string
       enum: [PENDING, ACTIVE, SUSPENDED]
@@ -598,7 +686,25 @@ components:
       type: string
       enum: [MANDATORY, EXCEPTIONAL]
 
+    SponsorshipRelationType:
+      type: string
+      enum: [FAMILY, FRIEND, COLLEAGUE, NEIGHBOR, OTHER]
+
     # ========== REQUESTS ==========
+    AssignIdentityRequest:
+      type: object
+      required:
+        - number
+        - name
+      properties:
+        number:
+          type: string
+          pattern: '^[A-Z0-9-]+$'
+          example: "COL-2026-001"
+        name:
+          type: string
+          example: "Collectivité des Riziculteurs d'Analamanga"
+
     CollectivityRequest:
       type: object
       required:
@@ -611,19 +717,19 @@ components:
         name:
           type: string
           maxLength: 100
-          example: "Collectivité d'Antananarivo"
         city:
           type: string
           maxLength: 100
-          example: "Antananarivo"
         specialty:
           type: string
           maxLength: 100
-          example: "Riziculture"
         creationDate:
           type: string
           format: date
-          example: "2024-01-15"
+        annualFeeAmount:
+          type: number
+          minimum: 0
+          description: "Cotisation annuelle obligatoire pour la collectivité (en MGA)"
         foundingMembers:
           type: array
           minItems: 10
@@ -650,6 +756,22 @@ components:
                 type: string
                 format: uuid
 
+    SponsorRequest:
+      type: object
+      required:
+        - sponsorId
+        - relationType
+      properties:
+        sponsorId:
+          type: string
+          format: uuid
+        relationType:
+          $ref: '#/components/schemas/SponsorshipRelationType'
+        relationDetails:
+          type: string
+          maxLength: 100
+          description: "Précisions sur la relation (ex: cousin, ami d'enfance, etc.)"
+
     MemberRequest:
       type: object
       required:
@@ -658,36 +780,33 @@ components:
         - birthDate
         - phone
         - address
+        - sponsors
       properties:
         firstName:
           type: string
           maxLength: 50
-          example: "Jean"
         lastName:
           type: string
           maxLength: 50
-          example: "Rakoto"
         birthDate:
           type: string
           format: date
-          example: "1990-05-20"
         email:
           type: string
           format: email
-          example: "jean.rakoto@email.com"
         phone:
           type: string
           pattern: '^[0-9+\- ]{10,20}$'
-          example: "0341234567"
         address:
           type: string
-          example: "Lot 123, Antananarivo"
         collectivityId:
           type: string
           format: uuid
-        sponsorId:
-          type: string
-          format: uuid
+        sponsors:
+          type: array
+          minItems: 2
+          items:
+            $ref: '#/components/schemas/SponsorRequest'
 
     PaymentRequest:
       type: object
@@ -707,20 +826,16 @@ components:
         amount:
           type: number
           minimum: 0.01
-          example: 50000
         type:
           $ref: '#/components/schemas/PaymentType'
         paymentDate:
           type: string
           format: date
-          example: "2024-03-15"
         reference:
           type: string
           maxLength: 50
-          example: "PAY-2024-001"
         description:
           type: string
-          example: "Cotisation mensuelle mars 2024"
 
     AccountRequest:
       type: object
@@ -732,7 +847,6 @@ components:
         name:
           type: string
           maxLength: 100
-          example: "Caisse Principale"
         type:
           $ref: '#/components/schemas/AccountType'
         collectivityId:
@@ -750,14 +864,11 @@ components:
         title:
           type: string
           maxLength: 200
-          example: "Assemblée Générale"
         description:
           type: string
-          example: "Assemblée générale annuelle"
         activityDate:
           type: string
           format: date-time
-          example: "2024-06-15T14:00:00"
         type:
           $ref: '#/components/schemas/ActivityType'
         collectivityId:
@@ -779,18 +890,18 @@ components:
           format: uuid
         present:
           type: boolean
-          example: true
         justification:
           type: string
-          example: null
 
-  
+    # ========== RESPONSES ==========
     CollectivityResponse:
       type: object
       properties:
         id:
           type: string
           format: uuid
+        number:
+          type: string
         name:
           type: string
         city:
@@ -800,6 +911,8 @@ components:
         creationDate:
           type: string
           format: date
+        annualFeeAmount:
+          type: number
         validatedByFederation:
           type: boolean
         status:
@@ -842,10 +955,22 @@ components:
           format: uuid
         collectivityName:
           type: string
+        sponsors:
+          type: array
+          items:
+            $ref: '#/components/schemas/SponsorResponse'
+
+    SponsorResponse:
+      type: object
+      properties:
         sponsorId:
           type: string
           format: uuid
         sponsorName:
+          type: string
+        relationType:
+          $ref: '#/components/schemas/SponsorshipRelationType'
+        relationDetails:
           type: string
 
     PaymentResponse:
@@ -1023,6 +1148,75 @@ components:
           type: object
           additionalProperties:
             type: number
+
+    # Statistiques fédérales (H)
+    CollectivityAttendanceRate:
+      type: object
+      properties:
+        collectivityId:
+          type: string
+          format: uuid
+        collectivityName:
+          type: string
+        totalActivities:
+          type: integer
+        averageAttendanceRate:
+          type: number
+          format: double
+        attendanceByActivity:
+          type: array
+          items:
+            type: object
+            properties:
+              activityId:
+                type: string
+                format: uuid
+              activityTitle:
+                type: string
+              activityDate:
+                type: string
+                format: date-time
+              attendanceRate:
+                type: number
+                format: double
+
+    CollectivityPaymentStatus:
+      type: object
+      properties:
+        collectivityId:
+          type: string
+          format: uuid
+        collectivityName:
+          type: string
+        totalMembers:
+          type: integer
+        upToDateMembers:
+          type: integer
+        upToDatePercentage:
+          type: number
+          format: double
+        expectedAnnualAmount:
+          type: number
+
+    CollectivityNewMembers:
+      type: object
+      properties:
+        collectivityId:
+          type: string
+          format: uuid
+        collectivityName:
+          type: string
+        newMembersCount:
+          type: integer
+        period:
+          type: object
+          properties:
+            startDate:
+              type: string
+              format: date
+            endDate:
+              type: string
+              format: date
 
     ErrorResponse:
       type: object
