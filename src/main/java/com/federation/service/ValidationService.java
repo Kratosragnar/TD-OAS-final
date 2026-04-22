@@ -34,13 +34,11 @@ public class ValidationService {
     private static final int MIN_FOUNDING_MEMBERS = 10;
     private static final int MIN_MONTHS_SENIORITY = 6;
 
-    /**
-     * Valide les conditions de création d'une collectivité
-     */
+
     public void validateCollectivityCreation(CollectivityRequest request) {
         List<String> errors = new ArrayList<>();
 
-        // 1. Vérifier le nombre minimum de membres fondateurs
+
         if (request.getFoundingMembers().size() < MIN_FOUNDING_MEMBERS) {
             errors.add(String.format("Minimum %d membres fondateurs requis, %d fournis",
                     MIN_FOUNDING_MEMBERS, request.getFoundingMembers().size()));
@@ -84,9 +82,7 @@ public class ValidationService {
         }
     }
 
-    /**
-     * Valide les conditions d'admission d'un membre
-     */
+
     @Transactional(readOnly = true)
     public void validateMemberAdmission(UUID memberId) {
         List<String> errors = new ArrayList<>();
@@ -94,7 +90,7 @@ public class ValidationService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessException("Membre non trouvé: " + memberId));
 
-        // 1. Vérifier le parrain
+
         if (member.getSponsor() == null) {
             errors.add("Un parrain est obligatoire");
         } else {
@@ -110,7 +106,7 @@ public class ValidationService {
             }
         }
 
-        // 2. Vérifier le paiement de 50 000 MGA
+
         boolean hasValidPayment = paymentRepository.existsByMemberIdAndAmountGreaterThanEqual(
                 memberId, ADMISSION_FEE);
         if (!hasValidPayment) {
@@ -141,9 +137,7 @@ public class ValidationService {
         log.info("Validation d'admission réussie pour le membre: {}", member.getFullName());
     }
 
-    /**
-     * Vérifie si un membre peut être parrain
-     */
+
     public boolean canBeSponsor(UUID memberId) {
         Member member = memberRepository.findById(memberId).orElse(null);
         if (member == null || member.getJoinDate() == null) {
@@ -153,4 +147,6 @@ public class ValidationService {
         long daysSinceJoin = ChronoUnit.DAYS.between(member.getJoinDate(), LocalDate.now());
         return daysSinceJoin >= MIN_SENIORITY_DAYS && member.getStatus() == MemberStatus.ACTIVE;
     }
+
+
 }

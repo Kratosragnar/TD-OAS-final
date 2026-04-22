@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -60,4 +61,6 @@ public class Collectivity {
 
     @OneToMany(mappedBy = "collectivity", cascade = CascadeType.ALL)
     private List<Activity> activities = new ArrayList<>();
+    @Column(name = "annual_fee_amount", precision = 15, scale = 2)
+    private BigDecimal annualFeeAmount = BigDecimal.ZERO;
 }

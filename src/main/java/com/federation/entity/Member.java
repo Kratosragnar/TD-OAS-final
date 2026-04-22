@@ -80,4 +80,10 @@ public class Member {
     public Object getFullName() {
         return null;
     }
+
+    @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
+    private List<Sponsorship> sponsorshipsReceived = new ArrayList<>();
+
+    @OneToMany(mappedBy = "sponsor")
+    private List<Sponsorship> sponsorshipsGiven = new ArrayList<>();
 }

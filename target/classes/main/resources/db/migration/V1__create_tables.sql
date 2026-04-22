@@ -113,3 +113,24 @@ CREATE INDEX idx_payments_account ON payments(account_id);
 CREATE INDEX idx_mandates_member ON mandates(member_id);
 CREATE INDEX idx_activities_collectivity ON activities(collectivity_id);
 CREATE INDEX idx_attendances_activity ON attendances(activity_id);
+
+
+
+CREATE TYPE sponsorship_relation_type AS ENUM ('FAMILY', 'FRIEND', 'COLLEAGUE', 'NEIGHBOR', 'OTHER');
+
+
+CREATE TABLE sponsorships (
+                              id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+                              candidate_id UUID NOT NULL REFERENCES members(id) ON DELETE CASCADE,
+                              sponsor_id UUID NOT NULL REFERENCES members(id) ON DELETE CASCADE,
+                              relation_type sponsorship_relation_type NOT NULL,
+                              relation_details VARCHAR(100),
+                              UNIQUE(candidate_id, sponsor_id)
+);
+
+
+ALTER TABLE collectivities ADD COLUMN annual_fee_amount DECIMAL(15,2) DEFAULT 0;
+
+
+CREATE INDEX idx_sponsorships_candidate ON sponsorships(candidate_id);
+CREATE INDEX idx_sponsorships_sponsor ON sponsorships(sponsor_id);
