@@ -1,11 +1,10 @@
 package com.federation.service;
 
 import com.federation.dto.request.CollectivityRequest;
+import com.federation.dto.request.CreateMembershipFeeRequest;
 import com.federation.dto.response.CollectivityResponse;
-import com.federation.entity.Collectivity;
-import com.federation.entity.Mandate;
-import com.federation.entity.Member;
-import com.federation.entity.Role;
+import com.federation.dto.response.MembershipFeeResponse;
+import com.federation.entity.*;
 import com.federation.enums.CollectivityStatus;
 import com.federation.exception.BusinessException;
 import com.federation.exception.ResourceNotFoundException;
@@ -48,7 +47,7 @@ public class CollectivityService {
                 .specialty(request.getSpecialty())
                 .creationDate(request.getCreationDate())
                 .validatedByFederation(false)
-                .status(CollectivityStatus.PENDING)
+                .status(    CollectivityStatus.PENDING)
                 .build();
 
         Collectivity savedCollectivity = collectivityRepository.save(collectivity);
@@ -107,5 +106,37 @@ public class CollectivityService {
         collectivityRepository.save(collectivity);
 
         log.info("Collectivité validée par la fédération: {}", id);
+    }
+    @Transactional
+    public List<MembershipFeeResponse> createFees(UUID collectivityId, List<CreateMembershipFeeRequest> requests) {
+        Collectivity collectivity = collectivityRepository.findById(collectivityId)
+                .orElseThrow(() -> new ResourceNotFoundException("Collectivité non trouvée"));
+
+        List<MembershipFee> fees = requests.stream().map(req -> MembershipFee.builder()
+                .collectivity(collectivity)
+                .eligibleFrom(req.getEligibleFrom())
+                .frequency(req.getFrequency())
+                .amount(req.getAmount())
+                .label(req.getLabel())
+                .build()).collect(Collectors.toList());
+
+        List<MembershipFee> saved = membershipFeeRepository.saveAll(fees);
+        return saved.stream().map(this::mapToResponse).collect(Collectors.toList());
+    }
+
+    public List<MembershipFeeResponse> getFeesByCollectivity(UUID collectivityId) {
+        return membershipFeeRepository.findByCollectivityId(collectivityId).stream()
+                .map(this::mapToResponse).collect(Collectors.toList());
+    }
+
+    private MembershipFeeResponse mapToResponse(MembershipFee fee) {
+        MembershipFeeResponse resp = new MembershipFeeResponse();
+        resp.setId(fee.getId());
+        resp.setEligibleFrom(fee.getEligibleFrom());
+        resp.setFrequency(fee.getFrequency());
+        resp.setAmount(fee.getAmount());
+        resp.setLabel(fee.getLabel());
+        resp.setStatus(fee.getStatus());
+        return resp;
     }
 }

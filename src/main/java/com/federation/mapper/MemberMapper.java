@@ -1,18 +1,41 @@
 package com.federation.mapper;
 
-import com.federation.dto.response.MemberResponse;
+import com.federation.dto.MemberDto;
 import com.federation.entity.Member;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface MemberMapper {
 
-    @Mapping(target = "fullName", expression = "java(member.getFirstName() + \" \" + member.getLastName())")
-    @Mapping(target = "seniorityDays", expression = "java(member.getSeniorityDays())")
-    @Mapping(target = "collectivityId", source = "collectivity.id")
-    @Mapping(target = "collectivityName", source = "collectivity.name")
-    @Mapping(target = "sponsorId", source = "sponsor.id")
-    @Mapping(target = "sponsorName", expression = "java(member.getSponsor() != null ? member.getSponsor().getFirstName() + \" \" + member.getSponsor().getLastName() : null)")
-    MemberResponse toResponse(Member member);
+
+    @Mapping(source = "referees", target = "refereeIds", qualifiedByName = "membersToIds")
+    MemberDto toDto(Member member);
+
+
+    @Mapping(source = "refereeIds", target = "referees", qualifiedByName = "idsToMembers")
+    Member toEntity(MemberDto dto);
+
+    List<MemberDto> toDtoList(List<Member> members);
+
+
+    @Named("membersToIds")
+    default List<UUID> membersToIds(List<Member> members) {
+        if (members == null) return null;
+        return members.stream().map(Member::getId).collect(Collectors.toList());
+    }
+
+
+    @Named("idsToMembers")
+    default List<Member> idsToMembers(List<UUID> ids) {
+        if (ids == null) return null;
+        return ids.stream()
+                .map(id -> Member.builder().id(id).build())
+                .collect(Collectors.toList());
+    }
 }

@@ -28,4 +28,8 @@ public interface CollectivityRepository extends JpaRepository<Collectivity, UUID
     Long countMembersByCollectivityId(@Param("id") UUID id);
 
     boolean existsByNameAndCity(String name, String city);
+    boolean existsByNumber(String number);
+    boolean existsByName(String name);
+    Optional<Collectivity> findByNumber(String number);
+    Optional<Collectivity> findByName(String name);
 }

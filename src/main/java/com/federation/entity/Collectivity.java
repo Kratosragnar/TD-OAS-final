@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,11 +26,14 @@ public class Collectivity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = 100, unique = true)
     private String name;
 
+    @Column(length = 50, unique = true)
+    private String number;   // dans la spec il est de type int, mais string est plus adapté
+
     @Column(nullable = false, length = 100)
-    private String city;
+    private String city;     // correspond au "location" de la spec
 
     @Column(length = 100)
     private String specialty;
@@ -61,6 +63,10 @@ public class Collectivity {
 
     @OneToMany(mappedBy = "collectivity", cascade = CascadeType.ALL)
     private List<Activity> activities = new ArrayList<>();
-    @Column(name = "annual_fee_amount", precision = 15, scale = 2)
-    private BigDecimal annualFeeAmount = BigDecimal.ZERO;
+
+    @OneToMany(mappedBy = "collectivity", cascade = CascadeType.ALL)
+    private List<MembershipFee> membershipFees = new ArrayList<>();
+
+    @OneToMany(mappedBy = "collectivity", cascade = CascadeType.ALL)
+    private List<CollectivityTransaction> transactions = new ArrayList<>();
 }

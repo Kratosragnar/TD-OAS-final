@@ -71,4 +71,23 @@ public class GlobalExceptionHandler {
                 .build();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
+
+    @ExceptionHandler(ValidationException.class)
+        public ResponseEntity<Map<String, Object>> handleValidation(ValidationException ex) {
+            Map<String, Object> body = new HashMap<>();
+            body.put("timestamp", LocalDateTime.now());
+            body.put("status", HttpStatus.BAD_REQUEST.value());
+            body.put("error", "Bad Request");
+            body.put("message", ex.getMessage());
+            return ResponseEntity.badRequest().body(body);
+        }
+        @ExceptionHandler(ResourceNotFoundException.class)
+        public ResponseEntity<Map<String, Object>> handleNotFound(ResourceNotFoundException ex) {
+            Map<String, Object> body = new HashMap<>();
+            body.put("timestamp", LocalDateTime.now());
+            body.put("status", HttpStatus.NOT_FOUND.value());
+            body.put("error", "Not Found");
+            body.put("message", ex.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+        }
 }

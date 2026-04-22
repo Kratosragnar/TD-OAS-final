@@ -1,15 +1,14 @@
 package com.federation.entity;
 
-import com.federation.enums.MemberStatus;
+import com.federation.enums.Gender;
+import com.federation.enums.MemberOccupation;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -26,64 +25,56 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "first_name", nullable = false, length = 50)
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "last_name", nullable = false, length = 50)
+    @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "birth_date", nullable = false)
+    @Column(name = "birth_date")
     private LocalDate birthDate;
 
-    @Column(unique = true, length = 100)
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+    private String address;
+    private String profession;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
     private String email;
 
-    @Column(unique = true, nullable = false, length = 20)
-    private String phone;
-
-    @Column(columnDefinition = "TEXT")
-    private String address;
-
-    @Column(name = "join_date")
-    private LocalDate joinDate;
-
     @Enumerated(EnumType.STRING)
-    @Column(length = 20)
-    private MemberStatus status = MemberStatus.INACTIVE;
+    private MemberOccupation occupation;
 
-    @CreationTimestamp
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
+    @Column(name = "adhesion_date")
+    private LocalDate adhesionDate;
 
     @ManyToOne
     @JoinColumn(name = "collectivity_id")
     private Collectivity collectivity;
 
-    @ManyToOne
-    @JoinColumn(name = "sponsor_id")
-    private Member sponsor;
+    // Parrains : relation réflexive ManyToMany
+    @ManyToMany
+    @JoinTable(
+            name = "member_referees",
+            joinColumns = @JoinColumn(name = "member_id"),
+            inverseJoinColumns = @JoinColumn(name = "referee_id")
+    )
+    private List<Member> referees = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
-    private List<Payment> payments = new ArrayList<>();
+    @Column(name = "mandate_start")
+    private LocalDate mandateStart;
 
-    @OneToMany(mappedBy = "member")
-    private List<Mandate> mandates = new ArrayList<>();
+    @Column(name = "mandate_end")
+    private LocalDate mandateEnd;
 
-    @OneToMany(mappedBy = "member")
-    private List<Attendance> attendances = new ArrayList<>();
+    // Paiements effectués par le membre
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<MemberPayment> payments = new ArrayList<>();
 
-    public Integer getSeniorityDays() {
-        if (joinDate == null) return 0;
-        return (int) java.time.temporal.ChronoUnit.DAYS.between(joinDate, LocalDate.now());
-    }
-
-    public Object getFullName() {
-        return null;
-    }
-
-    @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
-    private List<Sponsorship> sponsorshipsReceived = new ArrayList<>();
-
-    @OneToMany(mappedBy = "sponsor")
-    private List<Sponsorship> sponsorshipsGiven = new ArrayList<>();
+    // Transactions dans lesquelles le membre est débité
+    @OneToMany(mappedBy = "memberDebited", cascade = CascadeType.ALL)
+    private List<CollectivityTransaction> transactions = new ArrayList<>();
 }

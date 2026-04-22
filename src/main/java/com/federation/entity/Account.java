@@ -45,4 +45,10 @@ public class Account {
 
     @OneToMany(mappedBy = "account")
     private List<Payment> payments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "accountCredited")
+    private List<MemberPayment> receivedPayments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "accountCredited")
+    private List<CollectivityTransaction> transactions = new ArrayList<>();
 }

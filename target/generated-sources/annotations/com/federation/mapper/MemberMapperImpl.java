@@ -1,90 +1,79 @@
 package com.federation.mapper;
 
-import com.federation.dto.response.MemberResponse;
-import com.federation.entity.Collectivity;
+import com.federation.dto.MemberDto;
 import com.federation.entity.Member;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-04-21T15:18:55+0300",
+    date = "2026-04-22T16:54:27+0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
 )
 @Component
 public class MemberMapperImpl implements MemberMapper {
 
     @Override
-    public MemberResponse toResponse(Member member) {
+    public MemberDto toDto(Member member) {
         if ( member == null ) {
             return null;
         }
 
-        MemberResponse.MemberResponseBuilder memberResponse = MemberResponse.builder();
+        MemberDto memberDto = new MemberDto();
 
-        memberResponse.collectivityId( memberCollectivityId( member ) );
-        memberResponse.collectivityName( memberCollectivityName( member ) );
-        memberResponse.sponsorId( memberSponsorId( member ) );
-        memberResponse.id( member.getId() );
-        memberResponse.firstName( member.getFirstName() );
-        memberResponse.lastName( member.getLastName() );
-        memberResponse.birthDate( member.getBirthDate() );
-        memberResponse.email( member.getEmail() );
-        memberResponse.phone( member.getPhone() );
-        memberResponse.address( member.getAddress() );
-        memberResponse.joinDate( member.getJoinDate() );
-        memberResponse.status( member.getStatus() );
+        memberDto.setRefereeIds( membersToIds( member.getReferees() ) );
+        memberDto.setId( member.getId() );
+        memberDto.setFirstName( member.getFirstName() );
+        memberDto.setLastName( member.getLastName() );
+        memberDto.setBirthDate( member.getBirthDate() );
+        memberDto.setGender( member.getGender() );
+        memberDto.setAddress( member.getAddress() );
+        memberDto.setProfession( member.getProfession() );
+        memberDto.setPhoneNumber( member.getPhoneNumber() );
+        memberDto.setEmail( member.getEmail() );
+        memberDto.setOccupation( member.getOccupation() );
+        memberDto.setAdhesionDate( member.getAdhesionDate() );
 
-        memberResponse.fullName( member.getFirstName() + " " + member.getLastName() );
-        memberResponse.seniorityDays( member.getSeniorityDays() );
-        memberResponse.sponsorName( member.getSponsor() != null ? member.getSponsor().getFirstName() + " " + member.getSponsor().getLastName() : null );
-
-        return memberResponse.build();
+        return memberDto;
     }
 
-    private UUID memberCollectivityId(Member member) {
-        if ( member == null ) {
+    @Override
+    public Member toEntity(MemberDto dto) {
+        if ( dto == null ) {
             return null;
         }
-        Collectivity collectivity = member.getCollectivity();
-        if ( collectivity == null ) {
-            return null;
-        }
-        UUID id = collectivity.getId();
-        if ( id == null ) {
-            return null;
-        }
-        return id;
+
+        Member.MemberBuilder member = Member.builder();
+
+        member.referees( idsToMembers( dto.getRefereeIds() ) );
+        member.id( dto.getId() );
+        member.firstName( dto.getFirstName() );
+        member.lastName( dto.getLastName() );
+        member.birthDate( dto.getBirthDate() );
+        member.gender( dto.getGender() );
+        member.address( dto.getAddress() );
+        member.profession( dto.getProfession() );
+        member.phoneNumber( dto.getPhoneNumber() );
+        member.email( dto.getEmail() );
+        member.occupation( dto.getOccupation() );
+        member.adhesionDate( dto.getAdhesionDate() );
+
+        return member.build();
     }
 
-    private String memberCollectivityName(Member member) {
-        if ( member == null ) {
+    @Override
+    public List<MemberDto> toDtoList(List<Member> members) {
+        if ( members == null ) {
             return null;
         }
-        Collectivity collectivity = member.getCollectivity();
-        if ( collectivity == null ) {
-            return null;
-        }
-        String name = collectivity.getName();
-        if ( name == null ) {
-            return null;
-        }
-        return name;
-    }
 
-    private UUID memberSponsorId(Member member) {
-        if ( member == null ) {
-            return null;
+        List<MemberDto> list = new ArrayList<MemberDto>( members.size() );
+        for ( Member member : members ) {
+            list.add( toDto( member ) );
         }
-        Member sponsor = member.getSponsor();
-        if ( sponsor == null ) {
-            return null;
-        }
-        UUID id = sponsor.getId();
-        if ( id == null ) {
-            return null;
-        }
-        return id;
+
+        return list;
     }
 }
