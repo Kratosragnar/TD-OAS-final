@@ -4,17 +4,6 @@ info:
   version: 1.1.0
   description: |
     API de gestion d'une fédération agricole nationale.
-    
-    ## Évolutions du 21/04/2026
-    - Parrainage multiple (≥ 2 parrains confirmés) avec nature de la relation
-    - Condition de majorité des parrains issus de la collectivité cible
-    - Paiement obligatoire des frais d'adhésion + cotisations annuelles de la collectivité
-    - Statistiques fédérales : assiduité, membres à jour, nouveaux adhérents
-    
-    ## Règles métier
-    - Création collectivité : minimum 10 membres, ancienneté ≥ 6 mois, postes remplis
-    - Admission membre : ≥ 2 parrains confirmés, majorité de la collectivité cible, paiement 50 000 MGA + cotisation annuelle
-    - Caisse unique par collectivité
 
   contact:
     name: Fédération Agricole
@@ -66,18 +55,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CollectivityRequest'
-            example:
-              name: "Collectivité d'Antananarivo"
-              city: "Antananarivo"
-              specialty: "Riziculture"
-              creationDate: "2024-01-15"
-              annualFeeAmount: 200000
-              foundingMembers:
-                - memberId: "550e8400-e29b-41d4-a716-446655440000"
-                - memberId: "550e8400-e29b-41d4-a716-446655440001"
-              mandates:
-                - memberId: "550e8400-e29b-41d4-a716-446655440000"
-                  roleId: "660e8400-e29b-41d4-a716-446655440000"
       responses:
         '201':
           description: Collectivité créée avec succès
@@ -124,6 +101,9 @@ paths:
       tags:
         - Collectivités
       summary: Obtenir une collectivité par son ID
+      description: |
+        Retourne la collectivité avec l'ensemble de ses informations,
+        incluant la liste complète des membres inscrits (attribut `members`).
       operationId: findCollectivityById
       parameters:
         - name: id
@@ -139,9 +119,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CollectivityResponse'
+                $ref: '#/components/schemas/CollectivityDetailResponse'
         '404':
           description: Collectivité non trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
   /collectivities/{id}/validate:
     post:
@@ -162,6 +146,88 @@ paths:
         '404':
           description: Collectivité non trouvée
 
+  /collectivities/{id}/assign-identity:
+    patch:
+      tags:
+        - Collectivités
+      summary: Attribuer un numéro et un nom unique à une collectivité (fonctionnalité J)
+      description: |
+        La fédération attribue manuellement un numéro et un nom uniques à une collectivité existante.
+        Ces champs sont immuables une fois attribués. Une erreur 400 est retournée si on tente de les modifier.
+      operationId: assignCollectivityIdentity
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignIdentityRequest'
+      responses:
+        '200':
+          description: Numéro et nom attribués avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectivityResponse'
+        '400':
+          description: Données invalides ou déjà attribuées
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Collectivité non trouvée
+
+  /collectivities/{id}/financialAccounts:
+    get:
+      tags:
+        - Comptes
+      summary: Obtenir les comptes financiers d'une collectivité
+      description: |
+        Retourne la liste des comptes (caisse, mobile money, banque) associés à la
+        collectivité, avec leur solde calculé à la date fournie via le paramètre `at`.
+        Si `at` est absent, le solde est calculé à la date courante.
+      operationId: getCollectivityFinancialAccounts
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la collectivité
+          schema:
+            type: string
+            format: uuid
+        - name: at
+          in: query
+          required: false
+          description: >
+            Date à laquelle calculer le solde de chaque compte (format ISO 8601 : YYYY-MM-DD).
+            Si absente, utilise la date du jour.
+          schema:
+            type: string
+            format: date
+            example: "2024-06-30"
+      responses:
+        '200':
+          description: Liste des comptes avec solde à la date demandée
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FinancialAccountSnapshot'
+        '404':
+          description: Collectivité non trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
   # ========== MEMBRES ==========
   /members:
     post:
@@ -175,20 +241,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/MemberRequest'
-            example:
-              firstName: "Jean"
-              lastName: "Rakoto"
-              birthDate: "1990-05-20"
-              email: "jean.rakoto@email.com"
-              phone: "0341234567"
-              address: "Lot 123, Antananarivo"
-              collectivityId: "550e8400-e29b-41d4-a716-446655440000"
-              sponsors:
-                - sponsorId: "550e8400-e29b-41d4-a716-446655440001"
-                  relationType: "FRIEND"
-                  relationDetails: "Ami d'enfance"
-                - sponsorId: "550e8400-e29b-41d4-a716-446655440002"
-                  relationType: "COLLEAGUE"
       responses:
         '201':
           description: Membre créé avec succès
@@ -207,7 +259,7 @@ paths:
     post:
       tags:
         - Membres
-      summary: Faire adhérer un membre (validation des conditions)
+      summary: Faire adhérer un membre (validation des conditions B-2)
       description: |
         Nouvelles conditions (21/04/2026) :
         - Être parrainé par au moins deux membres confirmés (≥ 90 jours d'ancienneté et actifs)
@@ -262,8 +314,6 @@ paths:
                   type: string
                   format: uuid
                   description: ID de la nouvelle collectivité
-            example:
-              collectivityId: "550e8400-e29b-41d4-a716-446655440002"
       responses:
         '200':
           description: Transfert réussi
@@ -308,14 +358,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PaymentRequest'
-            example:
-              memberId: "550e8400-e29b-41d4-a716-446655440000"
-              accountId: "770e8400-e29b-41d4-a716-446655440000"
-              amount: 250000
-              type: "EXCEPTIONAL"
-              paymentDate: "2026-04-21"
-              reference: "ADH-2026-001"
-              description: "Frais d'adhésion 50 000 + cotisation annuelle 200 000"
       responses:
         '201':
           description: Paiement enregistré
@@ -394,10 +436,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/AccountRequest'
-            example:
-              name: "Caisse Principale"
-              type: "CASH"
-              collectivityId: "550e8400-e29b-41d4-a716-446655440000"
       responses:
         '201':
           description: Compte créé
@@ -460,12 +498,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ActivityRequest'
-            example:
-              title: "Assemblée Générale"
-              description: "Assemblée générale annuelle"
-              activityDate: "2024-06-15T14:00:00"
-              type: "MANDATORY"
-              collectivityId: "550e8400-e29b-41d4-a716-446655440000"
       responses:
         '201':
           description: Activité créée
@@ -508,11 +540,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/AttendanceRequest'
-            example:
-              activityId: "880e8400-e29b-41d4-a716-446655440000"
-              memberId: "550e8400-e29b-41d4-a716-446655440000"
-              present: true
-              justification: null
       responses:
         '201':
           description: Présence enregistrée
@@ -587,7 +614,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/MemberStats'
 
-  # ========== STATISTIQUES FÉDÉRALES (NOUVEAU) ==========
+  # ========== STATISTIQUES FÉDÉRALES ==========
   /statistics/federation/attendance-rate:
     get:
       tags:
@@ -679,20 +706,6 @@ components:
       type: string
       enum: [PENDING, ACTIVE, SUSPENDED]
 
-    AssignIdentityRequest:
-      type: object
-      required:
-        - number
-        - name
-      properties:
-        number:
-          type: string
-          pattern: '^[A-Z0-9-]+$'
-          example: "COL-2026-001"
-        name:
-          type: string
-          example: "Collectivité des Riziculteurs d'Analamanga"
-
     MemberStatus:
       type: string
       enum: [ACTIVE, INACTIVE, SUSPENDED]
@@ -713,6 +726,20 @@ components:
       type: string
       enum: [FAMILY, FRIEND, COLLEAGUE, NEIGHBOR, OTHER]
 
+    # ========== REQUESTS ==========
+    AssignIdentityRequest:
+      type: object
+      required:
+        - number
+        - name
+      properties:
+        number:
+          type: string
+          pattern: '^[A-Z0-9-]+$'
+          example: "COL-2026-001"
+        name:
+          type: string
+          example: "Collectivité des Riziculteurs d'Analamanga"
 
     CollectivityRequest:
       type: object
@@ -909,9 +936,9 @@ components:
         id:
           type: string
           format: uuid
-        name:
-          type: string
         number:
+          type: string
+        name:
           type: string
         city:
           type: string
@@ -930,6 +957,67 @@ components:
           type: integer
         activeMandatesCount:
           type: integer
+
+    CollectivityDetailResponse:
+      type: object
+      description: Représentation complète d'une collectivité, incluant la liste de ses membres.
+      properties:
+        id:
+          type: string
+          format: uuid
+        number:
+          type: string
+        name:
+          type: string
+        city:
+          type: string
+        specialty:
+          type: string
+        creationDate:
+          type: string
+          format: date
+        annualFeeAmount:
+          type: number
+        validatedByFederation:
+          type: boolean
+        status:
+          $ref: '#/components/schemas/CollectivityStatus'
+        memberCount:
+          type: integer
+        activeMandatesCount:
+          type: integer
+        members:
+          type: array
+          description: Liste des membres inscrits auprès de la collectivité
+          items:
+            $ref: '#/components/schemas/MemberResponse'
+
+    FinancialAccountSnapshot:
+      type: object
+      description: Solde d'un compte à une date donnée.
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: "Caisse Principale"
+        type:
+          $ref: '#/components/schemas/AccountType'
+        balanceAt:
+          type: number
+          description: Solde calculé à la date `at` fournie en paramètre
+          example: 1250000.00
+        snapshotDate:
+          type: string
+          format: date
+          description: Date effective du calcul du solde
+          example: "2024-06-30"
+        isActive:
+          type: boolean
+        collectivityId:
+          type: string
+          format: uuid
 
     MemberResponse:
       type: object
@@ -1158,7 +1246,7 @@ components:
           additionalProperties:
             type: number
 
-    # Statistiques fédérales
+    # ========== STATISTIQUES FÉDÉRALES ==========
     CollectivityAttendanceRate:
       type: object
       properties:
@@ -1172,7 +1260,6 @@ components:
         averageAttendanceRate:
           type: number
           format: double
-          description: "Pourcentage moyen de présence sur la période"
         attendanceByActivity:
           type: array
           items:
@@ -1207,7 +1294,6 @@ components:
           format: double
         expectedAnnualAmount:
           type: number
-          description: "Montant total attendu des cotisations annuelles"
 
     CollectivityNewMembers:
       type: object
