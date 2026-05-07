@@ -1,0 +1,1044 @@
+openapi: 3.0.0
+info:
+  title: Federation API
+  version: 1.0.0
+  description: |
+    API de gestion d'une fédération agricole nationale.
+    
+
+    
+
+  contact:
+    name: Fédération Agricole
+    email: contact@federation-agricole.mg
+    url: https://federation-agricole.mg
+
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Serveur de développement
+  - url: https://api.federation-agricole.mg/v1
+    description: Serveur de production
+
+tags:
+  - name: Collectivités
+    description: Gestion des collectivités
+  - name: Membres
+    description: Gestion des membres
+  - name: Paiements
+    description: Gestion des paiements et cotisations
+  - name: Comptes
+    description: Gestion des comptes financiers
+  - name: Activités
+    description: Gestion des activités
+  - name: Présences
+    description: Gestion des présences aux activités
+  - name: Statistiques
+    description: Calcul des statistiques
+
+paths:
+  # ========== COLLECTIVITÉS ==========
+  /collectivities:
+    post:
+      tags:
+        - Collectivités
+      summary: Créer une collectivité
+      description: |
+        Conditions requises :
+        - Minimum 10 membres fondateurs
+        - Ancienneté ≥ 6 mois pour chaque fondateur
+        - Postes obligatoires remplis (Président, Trésorier, Secrétaire)
+      operationId: createCollectivity
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollectivityRequest'
+            example:
+              name: "Collectivité d'Antananarivo"
+              city: "Antananarivo"
+              specialty: "Riziculture"
+              creationDate: "2024-01-15"
+              foundingMembers:
+                - memberId: "550e8400-e29b-41d4-a716-446655440000"
+                - memberId: "550e8400-e29b-41d4-a716-446655440001"
+              mandates:
+                - memberId: "550e8400-e29b-41d4-a716-446655440000"
+                  roleId: "660e8400-e29b-41d4-a716-446655440000"
+      responses:
+        '201':
+          description: Collectivité créée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectivityResponse'
+        '400':
+          description: Données invalides ou conditions non remplies
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    get:
+      tags:
+        - Collectivités
+      summary: Lister toutes les collectivités
+      operationId: findAllCollectivities
+      parameters:
+        - name: status
+          in: query
+          description: Filtrer par statut
+          schema:
+            type: string
+            enum: [PENDING, ACTIVE, SUSPENDED]
+        - name: city
+          in: query
+          description: Filtrer par ville
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Liste des collectivités
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CollectivityResponse'
+
+  /collectivities/{id}:
+    get:
+      tags:
+        - Collectivités
+      summary: Obtenir une collectivité par son ID
+      operationId: findCollectivityById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la collectivité
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Collectivité trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectivityResponse'
+        '404':
+          description: Collectivité non trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /collectivities/{id}/validate:
+    post:
+      tags:
+        - Collectivités
+      summary: Valider une collectivité par la fédération
+      operationId: validateCollectivity
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Collectivité validée avec succès
+        '404':
+          description: Collectivité non trouvée
+
+
+  /members:
+    post:
+      tags:
+        - Membres
+      summary: Créer un membre
+      operationId: createMember
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberRequest'
+            example:
+              firstName: "Jean"
+              lastName: "Rakoto"
+              birthDate: "1990-05-20"
+              email: "jean.rakoto@email.com"
+              phone: "0341234567"
+              address: "Lot 123, Antananarivo"
+              collectivityId: "550e8400-e29b-41d4-a716-446655440000"
+              sponsorId: "550e8400-e29b-41d4-a716-446655440001"
+      responses:
+        '201':
+          description: Membre créé avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberResponse'
+        '400':
+          description: Données invalides
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /members/{id}/join:
+    post:
+      tags:
+        - Membres
+      summary: Faire adhérer un membre
+      description: |
+        Conditions requises :
+        - Parrain confirmé (≥ 90 jours d'ancienneté)
+        - Paiement de 50 000 MGA effectué
+        - Informations personnelles complètes
+      operationId: joinMember
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Adhésion réussie
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberResponse'
+        '400':
+          description: Conditions non remplies
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /members/{id}/transfer:
+    post:
+      tags:
+        - Membres
+      summary: Transférer un membre vers une autre collectivité
+      operationId: transferMember
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - collectivityId
+              properties:
+                collectivityId:
+                  type: string
+                  format: uuid
+                  description: ID de la nouvelle collectivité
+            example:
+              collectivityId: "550e8400-e29b-41d4-a716-446655440002"
+      responses:
+        '200':
+          description: Transfert réussi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberResponse'
+        '400':
+          description: Erreur lors du transfert
+
+  /members/{id}/leave:
+    post:
+      tags:
+        - Membres
+      summary: Faire quitter un membre
+      operationId: leaveMember
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Départ enregistré
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberResponse'
+
+
+  /payments:
+    post:
+      tags:
+        - Paiements
+      summary: Enregistrer un paiement
+      operationId: createPayment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+            example:
+              memberId: "550e8400-e29b-41d4-a716-446655440000"
+              accountId: "770e8400-e29b-41d4-a716-446655440000"
+              amount: 50000
+              type: "MONTHLY"
+              paymentDate: "2024-03-15"
+              reference: "PAY-2024-001"
+              description: "Cotisation mensuelle mars 2024"
+      responses:
+        '201':
+          description: Paiement enregistré
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+
+    get:
+      tags:
+        - Paiements
+      summary: Lister tous les paiements
+      operationId: findAllPayments
+      parameters:
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [MONTHLY, ANNUAL, EXCEPTIONAL]
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Liste des paiements
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentResponse'
+
+  /members/{memberId}/payments:
+    get:
+      tags:
+        - Paiements
+      summary: Paiements d'un membre
+      operationId: findPaymentsByMember
+      parameters:
+        - name: memberId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Liste des paiements du membre
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentResponse'
+
+  /accounts:
+    post:
+      tags:
+        - Comptes
+      summary: Créer un compte
+      description: |
+        Types disponibles : CASH, BANK, MOBILE_MONEY
+        Une seule caisse (CASH) autorisée par collectivité.
+      operationId: createAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountRequest'
+            example:
+              name: "Caisse Principale"
+              type: "CASH"
+              collectivityId: "550e8400-e29b-41d4-a716-446655440000"
+      responses:
+        '201':
+          description: Compte créé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+        '400':
+          description: Erreur (ex: caisse déjà existante)
+
+    get:
+      tags:
+        - Comptes
+      summary: Lister tous les comptes
+      operationId: findAllAccounts
+      responses:
+        '200':
+          description: Liste des comptes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountResponse'
+
+  /accounts/{id}:
+    get:
+      tags:
+        - Comptes
+      summary: Obtenir un compte par son ID
+      operationId: findAccountById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Compte trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+        '404':
+          description: Compte non trouvé
+
+
+  /activities:
+    post:
+      tags:
+        - Activités
+      summary: Créer une activité
+      description: Types disponibles : MANDATORY, EXCEPTIONAL
+      operationId: createActivity
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivityRequest'
+            example:
+              title: "Assemblée Générale"
+              description: "Assemblée générale annuelle"
+              activityDate: "2024-06-15T14:00:00"
+              type: "MANDATORY"
+              collectivityId: "550e8400-e29b-41d4-a716-446655440000"
+      responses:
+        '201':
+          description: Activité créée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityResponse'
+
+    get:
+      tags:
+        - Activités
+      summary: Lister toutes les activités
+      operationId: findAllActivities
+      parameters:
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [MANDATORY, EXCEPTIONAL]
+      responses:
+        '200':
+          description: Liste des activités
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ActivityResponse'
+
+
+  /attendances:
+    post:
+      tags:
+        - Présences
+      summary: Enregistrer une présence
+      operationId: createAttendance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttendanceRequest'
+            example:
+              activityId: "880e8400-e29b-41d4-a716-446655440000"
+              memberId: "550e8400-e29b-41d4-a716-446655440000"
+              present: true
+              justification: null
+      responses:
+        '201':
+          description: Présence enregistrée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttendanceResponse'
+
+  /activities/{activityId}/attendances:
+    get:
+      tags:
+        - Présences
+      summary: Présences d'une activité
+      operationId: findAttendancesByActivity
+      parameters:
+        - name: activityId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Liste des présences
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AttendanceResponse'
+
+
+  /statistics/collectivities/{id}:
+    get:
+      tags:
+        - Statistiques
+      summary: Statistiques d'une collectivité
+      operationId: getCollectivityStats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Statistiques de la collectivité
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectivityStats'
+
+  /statistics/members/{id}:
+    get:
+      tags:
+        - Statistiques
+      summary: Statistiques d'un membre
+      operationId: getMemberStats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Statistiques du membre
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberStats'
+
+components:
+  schemas:
+ 
+    CollectivityStatus:
+      type: string
+      enum: [PENDING, ACTIVE, SUSPENDED]
+
+    MemberStatus:
+      type: string
+      enum: [ACTIVE, INACTIVE, SUSPENDED]
+
+    PaymentType:
+      type: string
+      enum: [MONTHLY, ANNUAL, EXCEPTIONAL]
+
+    AccountType:
+      type: string
+      enum: [CASH, BANK, MOBILE_MONEY]
+
+    ActivityType:
+      type: string
+      enum: [MANDATORY, EXCEPTIONAL]
+
+    # ========== REQUESTS ==========
+    CollectivityRequest:
+      type: object
+      required:
+        - name
+        - city
+        - creationDate
+        - foundingMembers
+        - mandates
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          example: "Collectivité d'Antananarivo"
+        city:
+          type: string
+          maxLength: 100
+          example: "Antananarivo"
+        specialty:
+          type: string
+          maxLength: 100
+          example: "Riziculture"
+        creationDate:
+          type: string
+          format: date
+          example: "2024-01-15"
+        foundingMembers:
+          type: array
+          minItems: 10
+          items:
+            type: object
+            required:
+              - memberId
+            properties:
+              memberId:
+                type: string
+                format: uuid
+        mandates:
+          type: array
+          items:
+            type: object
+            required:
+              - memberId
+              - roleId
+            properties:
+              memberId:
+                type: string
+                format: uuid
+              roleId:
+                type: string
+                format: uuid
+
+    MemberRequest:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - birthDate
+        - phone
+        - address
+      properties:
+        firstName:
+          type: string
+          maxLength: 50
+          example: "Jean"
+        lastName:
+          type: string
+          maxLength: 50
+          example: "Rakoto"
+        birthDate:
+          type: string
+          format: date
+          example: "1990-05-20"
+        email:
+          type: string
+          format: email
+          example: "jean.rakoto@email.com"
+        phone:
+          type: string
+          pattern: '^[0-9+\- ]{10,20}$'
+          example: "0341234567"
+        address:
+          type: string
+          example: "Lot 123, Antananarivo"
+        collectivityId:
+          type: string
+          format: uuid
+        sponsorId:
+          type: string
+          format: uuid
+
+    PaymentRequest:
+      type: object
+      required:
+        - memberId
+        - accountId
+        - amount
+        - type
+        - paymentDate
+      properties:
+        memberId:
+          type: string
+          format: uuid
+        accountId:
+          type: string
+          format: uuid
+        amount:
+          type: number
+          minimum: 0.01
+          example: 50000
+        type:
+          $ref: '#/components/schemas/PaymentType'
+        paymentDate:
+          type: string
+          format: date
+          example: "2024-03-15"
+        reference:
+          type: string
+          maxLength: 50
+          example: "PAY-2024-001"
+        description:
+          type: string
+          example: "Cotisation mensuelle mars 2024"
+
+    AccountRequest:
+      type: object
+      required:
+        - name
+        - type
+        - collectivityId
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          example: "Caisse Principale"
+        type:
+          $ref: '#/components/schemas/AccountType'
+        collectivityId:
+          type: string
+          format: uuid
+
+    ActivityRequest:
+      type: object
+      required:
+        - title
+        - activityDate
+        - type
+        - collectivityId
+      properties:
+        title:
+          type: string
+          maxLength: 200
+          example: "Assemblée Générale"
+        description:
+          type: string
+          example: "Assemblée générale annuelle"
+        activityDate:
+          type: string
+          format: date-time
+          example: "2024-06-15T14:00:00"
+        type:
+          $ref: '#/components/schemas/ActivityType'
+        collectivityId:
+          type: string
+          format: uuid
+
+    AttendanceRequest:
+      type: object
+      required:
+        - activityId
+        - memberId
+        - present
+      properties:
+        activityId:
+          type: string
+          format: uuid
+        memberId:
+          type: string
+          format: uuid
+        present:
+          type: boolean
+          example: true
+        justification:
+          type: string
+          example: null
+
+  
+    CollectivityResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        city:
+          type: string
+        specialty:
+          type: string
+        creationDate:
+          type: string
+          format: date
+        validatedByFederation:
+          type: boolean
+        status:
+          $ref: '#/components/schemas/CollectivityStatus'
+        memberCount:
+          type: integer
+        activeMandatesCount:
+          type: integer
+
+    MemberResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        lastName:
+          type: string
+        fullName:
+          type: string
+        birthDate:
+          type: string
+          format: date
+        email:
+          type: string
+        phone:
+          type: string
+        address:
+          type: string
+        joinDate:
+          type: string
+          format: date
+        status:
+          $ref: '#/components/schemas/MemberStatus'
+        seniorityDays:
+          type: integer
+        collectivityId:
+          type: string
+          format: uuid
+        collectivityName:
+          type: string
+        sponsorId:
+          type: string
+          format: uuid
+        sponsorName:
+          type: string
+
+    PaymentResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        amount:
+          type: number
+        type:
+          $ref: '#/components/schemas/PaymentType'
+        paymentDate:
+          type: string
+          format: date
+        reference:
+          type: string
+        description:
+          type: string
+        memberId:
+          type: string
+          format: uuid
+        memberName:
+          type: string
+        accountId:
+          type: string
+          format: uuid
+        accountName:
+          type: string
+
+    AccountResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/AccountType'
+        balance:
+          type: number
+        isActive:
+          type: boolean
+        collectivityId:
+          type: string
+          format: uuid
+        collectivityName:
+          type: string
+
+    ActivityResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+        activityDate:
+          type: string
+          format: date-time
+        type:
+          $ref: '#/components/schemas/ActivityType'
+        collectivityId:
+          type: string
+          format: uuid
+        collectivityName:
+          type: string
+        attendanceCount:
+          type: integer
+        presentCount:
+          type: integer
+
+    AttendanceResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        activityId:
+          type: string
+          format: uuid
+        activityTitle:
+          type: string
+        memberId:
+          type: string
+          format: uuid
+        memberName:
+          type: string
+        present:
+          type: boolean
+        justification:
+          type: string
+
+    CollectivityStats:
+      type: object
+      properties:
+        collectivityId:
+          type: string
+          format: uuid
+        collectivityName:
+          type: string
+        totalMembers:
+          type: integer
+        activeMembers:
+          type: integer
+        inactiveMembers:
+          type: integer
+        totalPayments:
+          type: number
+        totalActivities:
+          type: integer
+        mandatoryActivities:
+          type: integer
+        exceptionalActivities:
+          type: integer
+        averageAttendanceRate:
+          type: number
+          format: double
+        paymentsByMonth:
+          type: object
+          additionalProperties:
+            type: number
+        activitiesByMonth:
+          type: object
+          additionalProperties:
+            type: integer
+        topContributors:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberStats'
+
+    MemberStats:
+      type: object
+      properties:
+        memberId:
+          type: string
+          format: uuid
+        memberName:
+          type: string
+        seniorityDays:
+          type: integer
+        joinDate:
+          type: string
+          format: date
+        totalPayments:
+          type: number
+        paymentsCount:
+          type: integer
+        activitiesAttended:
+          type: integer
+        activitiesMissed:
+          type: integer
+        attendanceRate:
+          type: number
+          format: double
+        mandateHistory:
+          type: array
+          items:
+            type: object
+            properties:
+              roleName:
+                type: string
+              startDate:
+                type: string
+                format: date
+              endDate:
+                type: string
+                format: date
+              isActive:
+                type: boolean
+        paymentsByMonth:
+          type: object
+          additionalProperties:
+            type: number
+
+    ErrorResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        validationErrors:
+          type: object
+          additionalProperties:
+            type: string
