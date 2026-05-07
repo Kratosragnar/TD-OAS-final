@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="4a6d1d60-6ba0-469a-b104-0e9ea88aca1a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/TD-OAS.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/federation-api.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/openapi.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/FederationApiApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/config/OpenApiConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/controller/AccountController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/controller/ActivityController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/controller/AttendanceController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/controller/CollectivityController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/controller/MemberController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/controller/MemberPaymentController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/controller/PaymentController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/controller/StatisticsController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/request/AccountRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/request/ActivityRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/request/AttendanceRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/request/CollectivityInformationRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/request/CollectivityRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/request/CreateCollectivityStructureRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/request/CreateMemberPaymentRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/request/CreateMemberRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/request/CreateMembershipFeeRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/request/MemberRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/request/PaymentRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/request/SponsorRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/response/AccountResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/response/ActivityResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/response/AttendanceResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/response/BankAccountResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/response/CashAccountResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/response/CollectivityNewMembersStat.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/response/CollectivityResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/response/CollectivityStatsResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/response/CollectivityStructureResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/response/CollectivityTransactionResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/response/CollectivityUpToDateStat.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/response/FederationStatsResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/response/FinancialAccountResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/response/MemberPaymentResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/response/MemberPaymentStats.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/response/MemberResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/response/MembershipFeeResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/response/MobileBankingAccountResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/response/PaymentResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/response/SponsorResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/dto/response/StatisticsResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/entity/Account.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/entity/Activity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/entity/Attendance.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/entity/BankAccount.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/entity/CashAccount.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/entity/Collectivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/entity/CollectivityTransaction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/entity/Mandate.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/entity/Member.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/entity/MemberPayment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/entity/MembershipFee.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/entity/MobileBankingAccount.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/entity/Payment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/entity/Role.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/enums/AccountType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/enums/ActivityStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/enums/ActivityType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/enums/Bank.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/enums/CollectivityStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/enums/Frequency.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/enums/Gender.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/enums/MemberOccupation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/enums/MemberStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/enums/MobileBankingService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/enums/PaymentMode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/enums/PaymentType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/enums/SponsorshipRelationType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/exception/BusinessException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/exception/ErrorResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/exception/ResourceNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/exception/ValidationException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/mapper/CollectivityMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/mapper/MemberMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/mapper/PaymentMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/repository/AccountRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/repository/ActivityRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/repository/AttendanceRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/repository/CollectivityRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/repository/CollectivityTransactionRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/repository/MandateRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/repository/MemberPaymentRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/repository/MemberRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/repository/MembershipFeeRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/repository/PaymentRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/repository/RoleRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/service/AccountService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/service/ActivityService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/service/AttendanceService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/service/CollectivityService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/service/CollectivityTransactionService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/service/MemberPaymentService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/service/MemberService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/service/MembershipFeeService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/service/PaymentService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/service/StatisticsService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/java/com/federation/service/ValidationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/main/resources/db/migration/V1__create_tables.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/test/java/com/federation/controller/CollectivityControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/src/test/java/com/federation/service/ValidationServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/FederationApiApplication.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/config/OpenApiConfig.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/controller/AccountController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/controller/ActivityController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/controller/AttendanceController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/controller/CollectivityController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/controller/MemberController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/controller/MemberPaymentController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/controller/PaymentController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/controller/StatisticsController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/request/AccountRequest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/request/ActivityRequest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/request/AttendanceRequest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/request/CollectivityInformationRequest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/request/CollectivityRequest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/request/CreateCollectivityStructureRequest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/request/CreateMemberPaymentRequest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/request/CreateMemberRequest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/request/CreateMembershipFeeRequest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/request/MemberRequest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/request/PaymentRequest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/request/SponsorRequest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/AccountResponse$AccountResponseBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/AccountResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/ActivityResponse$ActivityResponseBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/ActivityResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/AttendanceResponse$AttendanceResponseBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/AttendanceResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/BankAccountResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/CashAccountResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/CollectivityNewMembersStat.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/CollectivityResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/CollectivityStatsResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/CollectivityStructureResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/CollectivityTransactionResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/CollectivityUpToDateStat.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/FederationStatsResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/FinancialAccountResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/MemberPaymentResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/MemberPaymentStats.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/MemberResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/MembershipFeeResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/MobileBankingAccountResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/PaymentResponse$PaymentResponseBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/PaymentResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/SponsorResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/StatisticsResponse$CollectivityStats$CollectivityStatsBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/StatisticsResponse$CollectivityStats.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/StatisticsResponse$MandateHistory$MandateHistoryBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/StatisticsResponse$MandateHistory.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/StatisticsResponse$MemberStats$MemberStatsBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/StatisticsResponse$MemberStats.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/dto/response/StatisticsResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/entity/Account.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/entity/Activity$ActivityBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/entity/Activity.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/entity/Attendance$AttendanceBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/entity/Attendance.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/entity/BankAccount.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/entity/CashAccount.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/entity/Collectivity$CollectivityBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/entity/Collectivity.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/entity/CollectivityTransaction$CollectivityTransactionBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/entity/CollectivityTransaction.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/entity/Mandate$MandateBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/entity/Mandate.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/entity/Member$MemberBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/entity/Member.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/entity/MemberPayment$MemberPaymentBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/entity/MemberPayment.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/entity/MembershipFee$MembershipFeeBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/entity/MembershipFee.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/entity/MobileBankingAccount.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/entity/Payment$PaymentBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/entity/Payment.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/entity/Role$RoleBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/entity/Role.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/enums/AccountType.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/enums/ActivityStatus.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/enums/ActivityType.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/enums/Bank.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/enums/CollectivityStatus.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/enums/Frequency.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/enums/Gender.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/enums/MemberOccupation.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/enums/MemberStatus.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/enums/MobileBankingService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/enums/PaymentMode.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/enums/PaymentType.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/enums/SponsorshipRelationType.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/exception/BusinessException.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/exception/ErrorResponse$ErrorResponseBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/exception/ErrorResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/exception/GlobalExceptionHandler.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/exception/ResourceNotFoundException.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/exception/ValidationException.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/mapper/CollectivityMapper$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/mapper/CollectivityMapper.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/mapper/CollectivityMapperImpl.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/mapper/MemberMapper.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/mapper/MemberMapperImpl.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/mapper/PaymentMapper.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/mapper/PaymentMapperImpl.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/repository/AccountRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/repository/ActivityRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/repository/AttendanceRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/repository/CollectivityRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/repository/CollectivityTransactionRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/repository/MandateRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/repository/MemberPaymentRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/repository/MemberRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/repository/MembershipFeeRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/repository/PaymentRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/repository/RoleRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/service/AccountService$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/service/AccountService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/service/ActivityService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/service/AttendanceService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/service/CollectivityService$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/service/CollectivityService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/service/CollectivityTransactionService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/service/MemberPaymentService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/service/MemberService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/service/MembershipFeeService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/service/PaymentService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/service/StatisticsService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/com/federation/service/ValidationService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/classes/db/migration/V1__create_tables.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/generated-sources/annotations/com/federation/mapper/CollectivityMapperImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/generated-sources/annotations/com/federation/mapper/MemberMapperImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fixed/target/generated-sources/annotations/com/federation/mapper/PaymentMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="3DOJOK1FMQWrnijtdSw6XlATZTk" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.FederationApiApplication.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.FederationApiApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/HEI/Nouveau dossier/TD-OAS-final&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RunManager">
+    <configuration name="FederationApiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="federation-api" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.federation.FederationApiApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.26927.53" />
+        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-IU-251.26927.53" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4a6d1d60-6ba0-469a-b104-0e9ea88aca1a" name="Changes" comment="" />
+      <created>1778147149514</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1778147149514</updated>
+      <workItem from="1778147151472" duration="978000" />
+      <workItem from="1778148172510" duration="246000" />
+      <workItem from="1778148449289" duration="698000" />
+      <workItem from="1778149185034" duration="302000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
