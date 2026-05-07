@@ -9,17 +9,26 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
+<<<<<<< HEAD
         <version>3.1.5</version>
+=======
+        <version>3.2.5</version>
+>>>>>>> d7e79cd (Fourth commit)
         <relativePath/>
     </parent>
 
     <groupId>com.federation</groupId>
     <artifactId>federation-api</artifactId>
     <version>1.0.0</version>
+<<<<<<< HEAD
+=======
+
+>>>>>>> d7e79cd (Fourth commit)
     <name>Federation API</name>
     <description>API de gestion d'une fédération agricole</description>
 
     <properties>
+<<<<<<< HEAD
         <java.version>17</java.version>
         <lombok.version>1.18.30</lombok.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
@@ -28,6 +37,17 @@
 
     <dependencies>
         <!-- Spring Boot Starters -->
+=======
+        <java.version>21</java.version>
+        <lombok.version>1.18.32</lombok.version>
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <springdoc.version>2.5.0</springdoc.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- Spring Boot -->
+>>>>>>> d7e79cd (Fourth commit)
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -43,19 +63,31 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
+<<<<<<< HEAD
         <!-- Database -->
+=======
+        <!-- PostgreSQL -->
+>>>>>>> d7e79cd (Fourth commit)
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
 
+<<<<<<< HEAD
+=======
+        <!-- Flyway -->
+>>>>>>> d7e79cd (Fourth commit)
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
         </dependency>
 
+<<<<<<< HEAD
         <!-- OpenAPI Documentation -->
+=======
+        <!-- OpenAPI / Swagger -->
+>>>>>>> d7e79cd (Fourth commit)
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -66,7 +98,11 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+<<<<<<< HEAD
             <version>${lombok.version}</version>
+=======
+            <version>1.18.30</version>
+>>>>>>> d7e79cd (Fourth commit)
             <scope>provided</scope>
         </dependency>
 
@@ -84,16 +120,29 @@
             <scope>provided</scope>
         </dependency>
 
+<<<<<<< HEAD
         <!-- Test -->
+=======
+        <!-- Tests -->
+>>>>>>> d7e79cd (Fourth commit)
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+<<<<<<< HEAD
+=======
+
+>>>>>>> d7e79cd (Fourth commit)
     </dependencies>
 
     <build>
         <plugins>
+<<<<<<< HEAD
+=======
+
+            <!-- Spring Boot -->
+>>>>>>> d7e79cd (Fourth commit)
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -107,27 +156,45 @@
                 </configuration>
             </plugin>
 
+<<<<<<< HEAD
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
+=======
+            <!-- Compiler -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+>>>>>>> d7e79cd (Fourth commit)
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <annotationProcessorPaths>
+<<<<<<< HEAD
                         <!-- Lombok doit être AVANT MapStruct -->
+=======
+                        <!-- Lombok DOIT être avant MapStruct -->
+>>>>>>> d7e79cd (Fourth commit)
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
                             <version>${lombok.version}</version>
                         </path>
+<<<<<<< HEAD
                         <!-- MapStruct -->
+=======
+>>>>>>> d7e79cd (Fourth commit)
                         <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
                             <version>${mapstruct.version}</version>
                         </path>
+<<<<<<< HEAD
                         <!-- Pour que Lombok et MapStruct fonctionnent ensemble -->
+=======
+>>>>>>> d7e79cd (Fourth commit)
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok-mapstruct-binding</artifactId>
@@ -140,6 +207,14 @@
                     </compilerArgs>
                 </configuration>
             </plugin>
+<<<<<<< HEAD
         </plugins>
     </build>
 </project>
+=======
+
+        </plugins>
+    </build>
+
+</project>
+>>>>>>> d7e79cd (Fourth commit)

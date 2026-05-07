@@ -41,7 +41,10 @@ public class PaymentService {
         Account account = accountRepository.findById(request.getAccountId())
                 .orElseThrow(() -> new ResourceNotFoundException("Compte non trouvé: " + request.getAccountId()));
 
+<<<<<<< HEAD
         // Vérifier que le compte appartient à la même collectivité que le membre
+=======
+>>>>>>> d7e79cd (Fourth commit)
         if (member.getCollectivity() != null && account.getCollectivity() != null &&
                 !member.getCollectivity().getId().equals(account.getCollectivity().getId())) {
             throw new BusinessException("Le compte n'appartient pas à la collectivité du membre");
@@ -51,7 +54,10 @@ public class PaymentService {
         payment.setMember(member);
         payment.setAccount(account);
 
+<<<<<<< HEAD
         // Mettre à jour le solde du compte
+=======
+>>>>>>> d7e79cd (Fourth commit)
         account.setBalance(account.getBalance().add(request.getAmount()));
         accountRepository.save(account);
 

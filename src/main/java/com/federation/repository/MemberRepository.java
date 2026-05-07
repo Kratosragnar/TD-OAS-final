@@ -5,6 +5,7 @@ import com.federation.enums.MemberStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+<<<<<<< HEAD
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -36,12 +37,22 @@ public interface MemberRepository extends JpaRepository<Member, UUID> {
     java.math.BigDecimal sumPaymentsByMemberId(@Param("memberId") UUID memberId);
 
     // Nouvelles méthodes pour les statistiques
+=======
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
+
+public interface MemberRepository extends JpaRepository<Member, UUID> {
+    List<Member> findByCollectivityId(UUID collectivityId);
+
+>>>>>>> d7e79cd (Fourth commit)
     @Query("SELECT COUNT(m) FROM Member m WHERE m.collectivity.id = :collectivityId")
     Long countByCollectivityId(@Param("collectivityId") UUID collectivityId);
 
     @Query("SELECT COUNT(m) FROM Member m WHERE m.collectivity.id = :collectivityId AND m.status = :status")
     Long countByCollectivityIdAndStatus(@Param("collectivityId") UUID collectivityId, @Param("status") MemberStatus status);
 
+<<<<<<< HEAD
     // Recherche avec fetch des relations pour éviter LazyInitializationException
     @Query("SELECT m FROM Member m LEFT JOIN FETCH m.collectivity LEFT JOIN FETCH m.sponsor WHERE m.id = :id")
     Optional<Member> findByIdWithRelations(@Param("id") UUID id);
@@ -54,3 +65,11 @@ public interface MemberRepository extends JpaRepository<Member, UUID> {
     @Query("SELECT COUNT(m) > 0 FROM Member m WHERE m.phone = :phone AND (:excludeId IS NULL OR m.id != :excludeId)")
     boolean existsByPhoneAndIdNot(@Param("phone") String phone, @Param("excludeId") UUID excludeId);
 }
+=======
+    @Query("SELECT m FROM Member m WHERE m.adhesionDate <= :date")
+    List<Member> findMembersWithMinSeniority(@Param("date") LocalDate date);
+
+    @Query("SELECT m FROM Member m WHERE m.adhesionDate BETWEEN :start AND :end")
+    List<Member> findNewMembersBetween(@Param("start") LocalDate start, @Param("end") LocalDate end);
+}
+>>>>>>> d7e79cd (Fourth commit)

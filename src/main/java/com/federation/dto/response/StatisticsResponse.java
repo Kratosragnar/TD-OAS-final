@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+<<<<<<< HEAD
 /**
  * Classe conteneur pour les réponses de statistiques.
  * Ne pas instancier directement - utiliser les classes internes statiques.
@@ -18,11 +19,18 @@ import java.util.UUID;
 public final class StatisticsResponse {
 
     // Constructeur privé pour empêcher l'instanciation
+=======
+public final class StatisticsResponse {
+
+>>>>>>> d7e79cd (Fourth commit)
     private StatisticsResponse() {
         throw new UnsupportedOperationException("Cette classe ne peut pas être instanciée");
     }
 
+<<<<<<< HEAD
     // ========== CLASSE INTERNE : CollectivityStats ==========
+=======
+>>>>>>> d7e79cd (Fourth commit)
     @Data
     @Builder
     @NoArgsConstructor
@@ -43,7 +51,10 @@ public final class StatisticsResponse {
         private List<MemberStats> topContributors;
     }
 
+<<<<<<< HEAD
     // ========== CLASSE INTERNE : MemberStats ==========
+=======
+>>>>>>> d7e79cd (Fourth commit)
     @Data
     @Builder
     @NoArgsConstructor
@@ -62,7 +73,10 @@ public final class StatisticsResponse {
         private Map<String, BigDecimal> paymentsByMonth;
     }
 
+<<<<<<< HEAD
     // ========== CLASSE INTERNE : MandateHistory ==========
+=======
+>>>>>>> d7e79cd (Fourth commit)
     @Data
     @Builder
     @NoArgsConstructor

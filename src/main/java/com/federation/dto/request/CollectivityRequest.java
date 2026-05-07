@@ -1,13 +1,18 @@
 package com.federation.dto.request;
 
+<<<<<<< HEAD
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import java.time.LocalDate;
+=======
+import lombok.Data;
+>>>>>>> d7e79cd (Fourth commit)
 import java.util.List;
 import java.util.UUID;
 
 @Data
 public class CollectivityRequest {
+<<<<<<< HEAD
 
     @NotBlank(message = "Le nom est obligatoire")
     @Size(max = 100, message = "Le nom ne peut pas dépasser 100 caractères")
@@ -44,4 +49,11 @@ public class CollectivityRequest {
         @NotNull(message = "L'ID du rôle est obligatoire")
         private UUID roleId;
     }
+=======
+    private String location;
+    private String specialty;
+    private List<UUID> members;
+    private Boolean federationApproval;
+    private CreateCollectivityStructureRequest structure;
+>>>>>>> d7e79cd (Fourth commit)
 }

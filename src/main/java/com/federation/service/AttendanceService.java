@@ -32,7 +32,10 @@ public class AttendanceService {
     public AttendanceResponse create(AttendanceRequest request) {
         log.info("Enregistrement de présence: activité={}, membre={}", request.getActivityId(), request.getMemberId());
 
+<<<<<<< HEAD
         // Vérifier si la présence existe déjà
+=======
+>>>>>>> d7e79cd (Fourth commit)
         if (attendanceRepository.existsByActivityIdAndMemberId(request.getActivityId(), request.getMemberId())) {
             throw new BusinessException("La présence a déjà été enregistrée pour ce membre à cette activité");
         }
@@ -43,7 +46,10 @@ public class AttendanceService {
         Member member = memberRepository.findById(request.getMemberId())
                 .orElseThrow(() -> new ResourceNotFoundException("Membre non trouvé: " + request.getMemberId()));
 
+<<<<<<< HEAD
         // Vérifier que le membre appartient à la collectivité de l'activité
+=======
+>>>>>>> d7e79cd (Fourth commit)
         if (member.getCollectivity() == null || activity.getCollectivity() == null ||
                 !member.getCollectivity().getId().equals(activity.getCollectivity().getId())) {
             throw new BusinessException("Le membre n'appartient pas à la collectivité de cette activité");

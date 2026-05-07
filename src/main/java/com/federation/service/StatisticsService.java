@@ -2,7 +2,10 @@ package com.federation.service;
 
 import com.federation.dto.response.StatisticsResponse;
 import com.federation.entity.Collectivity;
+<<<<<<< HEAD
 import com.federation.entity.Mandate;
+=======
+>>>>>>> d7e79cd (Fourth commit)
 import com.federation.entity.Member;
 import com.federation.enums.ActivityType;
 import com.federation.enums.MemberStatus;
@@ -38,6 +41,7 @@ public class StatisticsService {
         Collectivity collectivity = collectivityRepository.findById(collectivityId)
                 .orElseThrow(() -> new ResourceNotFoundException("Collectivité non trouvée: " + collectivityId));
 
+<<<<<<< HEAD
         // Nombre total de membres
         Long totalMembers = memberRepository.countByCollectivityId(collectivityId);
 
@@ -49,10 +53,19 @@ public class StatisticsService {
         BigDecimal totalPayments = paymentRepository.sumPaymentsByCollectivityId(collectivityId);
 
         // Statistiques des activités
+=======
+        Long totalMembers = memberRepository.countByCollectivityId(collectivityId);
+        Long activeMembers = memberRepository.countByCollectivityIdAndStatus(collectivityId, MemberStatus.ACTIVE);
+        Long inactiveMembers = totalMembers - activeMembers;
+
+        BigDecimal totalPayments = paymentRepository.sumPaymentsByCollectivityId(collectivityId);
+
+>>>>>>> d7e79cd (Fourth commit)
         Long totalActivities = activityRepository.countActivitiesByCollectivityId(collectivityId);
         Long mandatoryActivities = activityRepository.countByCollectivityIdAndType(collectivityId, ActivityType.MANDATORY);
         Long exceptionalActivities = totalActivities - mandatoryActivities;
 
+<<<<<<< HEAD
         // Taux de présence moyen
         Double averageAttendanceRate = calculateAverageAttendanceRate(collectivityId);
 
@@ -63,6 +76,11 @@ public class StatisticsService {
         Map<String, Long> activitiesByMonth = getActivitiesByMonth(collectivityId);
 
         // Top contributeurs
+=======
+        Double averageAttendanceRate = calculateAverageAttendanceRate(collectivityId);
+        Map<String, BigDecimal> paymentsByMonth = getPaymentsByMonth(collectivityId);
+        Map<String, Long> activitiesByMonth = getActivitiesByMonth(collectivityId);
+>>>>>>> d7e79cd (Fourth commit)
         List<StatisticsResponse.MemberStats> topContributors = getTopContributors(collectivityId, 5);
 
         return StatisticsResponse.CollectivityStats.builder()
@@ -89,6 +107,7 @@ public class StatisticsService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ResourceNotFoundException("Membre non trouvé: " + memberId));
 
+<<<<<<< HEAD
         // Total des paiements
         BigDecimal totalPayments = paymentRepository.sumPaymentsByMemberId(memberId);
 
@@ -105,10 +124,21 @@ public class StatisticsService {
         Double attendanceRate = calculateMemberAttendanceRate(memberId);
 
         // Paiements par mois
+=======
+        BigDecimal totalPayments = paymentRepository.sumPaymentsByMemberId(memberId);
+        Long paymentsCount = paymentRepository.countPaymentsByMemberId(memberId);
+        Long activitiesAttended = attendanceRepository.countAttendedActivitiesByMemberId(memberId);
+        Long totalActivities = attendanceRepository.countByMemberId(memberId);
+        Long activitiesMissed = totalActivities - activitiesAttended;
+
+        List<StatisticsResponse.MandateHistory> mandateHistory = getMandateHistory(memberId);
+        Double attendanceRate = calculateMemberAttendanceRate(memberId);
+>>>>>>> d7e79cd (Fourth commit)
         Map<String, BigDecimal> paymentsByMonth = getMemberPaymentsByMonth(memberId);
 
         return StatisticsResponse.MemberStats.builder()
                 .memberId(memberId)
+<<<<<<< HEAD
                 .memberName(member.getFirstName() + " " + member.getLastName())
                 .seniorityDays(member.getSeniorityDays())
                 .joinDate(member.getJoinDate())
@@ -116,6 +146,15 @@ public class StatisticsService {
                 .paymentsCount(paymentsCount)
                 .activitiesAttended(activitiesAttended)
                 .activitiesMissed(0L) // À calculer si nécessaire
+=======
+                .memberName(member.getFullName())
+                .seniorityDays(member.getSeniorityDays())
+                .joinDate(member.getAdhesionDate())
+                .totalPayments(totalPayments != null ? totalPayments : BigDecimal.ZERO)
+                .paymentsCount(paymentsCount)
+                .activitiesAttended(activitiesAttended)
+                .activitiesMissed(activitiesMissed)
+>>>>>>> d7e79cd (Fourth commit)
                 .attendanceRate(attendanceRate)
                 .mandateHistory(mandateHistory)
                 .paymentsByMonth(paymentsByMonth)
@@ -124,6 +163,7 @@ public class StatisticsService {
 
     private Double calculateAverageAttendanceRate(UUID collectivityId) {
         List<Object[]> results = attendanceRepository.findAttendanceRatesByCollectivityId(collectivityId);
+<<<<<<< HEAD
         if (results.isEmpty()) {
             return 0.0;
         }
@@ -136,6 +176,16 @@ public class StatisticsService {
                 })
                 .sum();
 
+=======
+        if (results.isEmpty()) return 0.0;
+        double totalRate = results.stream()
+                .mapToDouble(row -> {
+                    Long total = (Long) row[1];
+                    Long present = (Long) row[2];
+                    return total > 0 ? (present * 100.0) / total : 0.0;
+                })
+                .sum();
+>>>>>>> d7e79cd (Fourth commit)
         return totalRate / results.size();
     }
 
@@ -179,11 +229,15 @@ public class StatisticsService {
     private Double calculateMemberAttendanceRate(UUID memberId) {
         Long attended = attendanceRepository.countAttendedActivitiesByMemberId(memberId);
         Long total = attendanceRepository.countByMemberId(memberId);
+<<<<<<< HEAD
 
         if (total == 0) {
             return 0.0;
         }
 
+=======
+        if (total == 0) return 0.0;
+>>>>>>> d7e79cd (Fourth commit)
         return (attended * 100.0) / total;
     }
 
@@ -195,4 +249,8 @@ public class StatisticsService {
                         Collectors.reducing(BigDecimal.ZERO, p -> p.getAmount(), BigDecimal::add)
                 ));
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> d7e79cd (Fourth commit)

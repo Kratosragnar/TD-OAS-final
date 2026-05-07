@@ -4,15 +4,22 @@ info:
   version: 1.0.0
   description: |
     API de gestion d'une fédération agricole nationale.
+<<<<<<< HEAD
     
 
     
 
+=======
+    Inclut les fonctionnalités A, B-2, J, C/D, statistiques G/H.
+>>>>>>> d7e79cd (Fourth commit)
   contact:
     name: Fédération Agricole
     email: contact@federation-agricole.mg
     url: https://federation-agricole.mg
+<<<<<<< HEAD
 
+=======
+>>>>>>> d7e79cd (Fourth commit)
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
@@ -25,6 +32,7 @@ servers:
 
 tags:
   - name: Collectivités
+<<<<<<< HEAD
     description: Gestion des collectivités
   - name: Membres
     description: Gestion des membres
@@ -38,11 +46,20 @@ tags:
     description: Gestion des présences aux activités
   - name: Statistiques
     description: Calcul des statistiques
+=======
+  - name: Membres
+  - name: Paiements
+  - name: Comptes
+  - name: Activités
+  - name: Présences
+  - name: Statistiques
+>>>>>>> d7e79cd (Fourth commit)
 
 paths:
   # ========== COLLECTIVITÉS ==========
   /collectivities:
     post:
+<<<<<<< HEAD
       tags:
         - Collectivités
       summary: Créer une collectivité
@@ -51,6 +68,10 @@ paths:
         - Minimum 10 membres fondateurs
         - Ancienneté ≥ 6 mois pour chaque fondateur
         - Postes obligatoires remplis (Président, Trésorier, Secrétaire)
+=======
+      tags: [Collectivités]
+      summary: Créer une collectivité (A)
+>>>>>>> d7e79cd (Fourth commit)
       operationId: createCollectivity
       requestBody:
         required: true
@@ -58,6 +79,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CollectivityRequest'
+<<<<<<< HEAD
             example:
               name: "Collectivité d'Antananarivo"
               city: "Antananarivo"
@@ -72,32 +94,51 @@ paths:
       responses:
         '201':
           description: Collectivité créée avec succès
+=======
+      responses:
+        '201':
+          description: Collectivité créée
+>>>>>>> d7e79cd (Fourth commit)
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CollectivityResponse'
         '400':
+<<<<<<< HEAD
           description: Données invalides ou conditions non remplies
+=======
+          description: Erreur de validation
+>>>>>>> d7e79cd (Fourth commit)
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
     get:
+<<<<<<< HEAD
       tags:
         - Collectivités
+=======
+      tags: [Collectivités]
+>>>>>>> d7e79cd (Fourth commit)
       summary: Lister toutes les collectivités
       operationId: findAllCollectivities
       parameters:
         - name: status
           in: query
+<<<<<<< HEAD
           description: Filtrer par statut
+=======
+>>>>>>> d7e79cd (Fourth commit)
           schema:
             type: string
             enum: [PENDING, ACTIVE, SUSPENDED]
         - name: city
           in: query
+<<<<<<< HEAD
           description: Filtrer par ville
+=======
+>>>>>>> d7e79cd (Fourth commit)
           schema:
             type: string
       responses:
@@ -112,6 +153,7 @@ paths:
 
   /collectivities/{id}:
     get:
+<<<<<<< HEAD
       tags:
         - Collectivités
       summary: Obtenir une collectivité par son ID
@@ -124,6 +166,13 @@ paths:
           schema:
             type: string
             format: uuid
+=======
+      tags: [Collectivités]
+      summary: Obtenir une collectivité par ID
+      operationId: findCollectivityById
+      parameters:
+        - $ref: '#/components/parameters/CollectivityId'
+>>>>>>> d7e79cd (Fourth commit)
       responses:
         '200':
           description: Collectivité trouvée
@@ -132,7 +181,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/CollectivityResponse'
         '404':
+<<<<<<< HEAD
           description: Collectivité non trouvée
+=======
+          description: Non trouvée
+>>>>>>> d7e79cd (Fourth commit)
           content:
             application/json:
               schema:
@@ -140,6 +193,7 @@ paths:
 
   /collectivities/{id}/validate:
     post:
+<<<<<<< HEAD
       tags:
         - Collectivités
       summary: Valider une collectivité par la fédération
@@ -163,12 +217,219 @@ paths:
       tags:
         - Membres
       summary: Créer un membre
+=======
+      tags: [Collectivités]
+      summary: Valider une collectivité par la fédération
+      operationId: validateCollectivity
+      parameters:
+        - $ref: '#/components/parameters/CollectivityId'
+      responses:
+        '200':
+          description: Validée
+        '404':
+          description: Non trouvée
+
+  /collectivities/{id}/informations:
+    put:
+      tags: [Collectivités]
+      summary: Attribuer numéro et nom unique (J)
+      operationId: assignCollectivityIdentity
+      parameters:
+        - $ref: '#/components/parameters/CollectivityId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollectivityInformationRequest'
+      responses:
+        '200':
+          description: Informations mises à jour
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectivityResponse'
+        '400':
+          description: Déjà attribué ou doublon
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Collectivité non trouvée
+
+  /collectivities/{id}/membershipFees:
+    get:
+      tags: [Paiements]
+      summary: Liste des cotisations d'une collectivité
+      operationId: getMembershipFees
+      parameters:
+        - $ref: '#/components/parameters/CollectivityId'
+      responses:
+        '200':
+          description: Cotisations actives
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MembershipFeeResponse'
+        '404':
+          description: Collectivité non trouvée
+
+    post:
+      tags: [Paiements]
+      summary: Créer des cotisations pour une collectivité
+      operationId: createMembershipFees
+      parameters:
+        - $ref: '#/components/parameters/CollectivityId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateMembershipFeeRequest'
+      responses:
+        '201':
+          description: Cotisations créées
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MembershipFeeResponse'
+        '400':
+          description: Données invalides
+        '404':
+          description: Collectivité non trouvée
+
+  /collectivities/{id}/transactions:
+    get:
+      tags: [Paiements]
+      summary: Transactions d'une collectivité sur une période
+      operationId: getCollectivityTransactions
+      parameters:
+        - $ref: '#/components/parameters/CollectivityId'
+        - name: from
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: to
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Liste des transactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CollectivityTransactionResponse'
+        '400':
+          description: Paramètres invalides
+        '404':
+          description: Collectivité non trouvée
+
+  /collectivities/{id}/financialAccounts:
+    get:
+      tags: [Comptes]
+      summary: Comptes financiers d'une collectivité avec solde à une date
+      operationId: getFinancialAccounts
+      parameters:
+        - $ref: '#/components/parameters/CollectivityId'
+        - name: at
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          description: Date à laquelle obtenir le solde
+      responses:
+        '200':
+          description: Liste des comptes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FinancialAccountResponse'
+        '404':
+          description: Collectivité non trouvée
+
+  /collectivities/{id}/statistics:
+    get:
+      tags: [Statistiques]
+      summary: Statistiques de paiement par membre (G)
+      operationId: getCollectivityPaymentStats
+      parameters:
+        - $ref: '#/components/parameters/CollectivityId'
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Statistiques de la collectivité
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectivityStatsResponse'
+
+  /collectivities/statistics:
+    get:
+      tags: [Statistiques]
+      summary: Statistiques globales de la fédération (H)
+      operationId: getFederationStats
+      parameters:
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Statistiques fédérales
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FederationStatsResponse'
+
+  # ========== MEMBRES ==========
+  /members:
+    post:
+      tags: [Membres]
+      summary: Créer un membre (B-2)
+>>>>>>> d7e79cd (Fourth commit)
       operationId: createMember
       requestBody:
         required: true
         content:
           application/json:
             schema:
+<<<<<<< HEAD
               $ref: '#/components/schemas/MemberRequest'
             example:
               firstName: "Jean"
@@ -188,6 +449,22 @@ paths:
                 $ref: '#/components/schemas/MemberResponse'
         '400':
           description: Données invalides
+=======
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateMemberRequest'
+      responses:
+        '201':
+          description: Membres créés
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberResponse'
+        '400':
+          description: Erreur de validation
+>>>>>>> d7e79cd (Fourth commit)
           content:
             application/json:
               schema:
@@ -195,6 +472,7 @@ paths:
 
   /members/{id}/join:
     post:
+<<<<<<< HEAD
       tags:
         - Membres
       summary: Faire adhérer un membre
@@ -214,12 +492,23 @@ paths:
       responses:
         '200':
           description: Adhésion réussie
+=======
+      tags: [Membres]
+      summary: Valider l'adhésion d'un membre (B-2)
+      operationId: joinMember
+      parameters:
+        - $ref: '#/components/parameters/MemberId'
+      responses:
+        '200':
+          description: Adhésion validée
+>>>>>>> d7e79cd (Fourth commit)
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/MemberResponse'
         '400':
           description: Conditions non remplies
+<<<<<<< HEAD
           content:
             application/json:
               schema:
@@ -238,18 +527,33 @@ paths:
           schema:
             type: string
             format: uuid
+=======
+
+  /members/{id}/transfer:
+    post:
+      tags: [Membres]
+      summary: Transférer un membre
+      operationId: transferMember
+      parameters:
+        - $ref: '#/components/parameters/MemberId'
+>>>>>>> d7e79cd (Fourth commit)
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
+<<<<<<< HEAD
               required:
                 - collectivityId
+=======
+              required: [collectivityId]
+>>>>>>> d7e79cd (Fourth commit)
               properties:
                 collectivityId:
                   type: string
                   format: uuid
+<<<<<<< HEAD
                   description: ID de la nouvelle collectivité
             example:
               collectivityId: "550e8400-e29b-41d4-a716-446655440002"
@@ -291,11 +595,38 @@ paths:
         - Paiements
       summary: Enregistrer un paiement
       operationId: createPayment
+=======
+      responses:
+        '200':
+          description: Transfert réussi
+        '400':
+          description: Erreur
+
+  /members/{id}/leave:
+    post:
+      tags: [Membres]
+      summary: Faire quitter un membre
+      operationId: leaveMember
+      parameters:
+        - $ref: '#/components/parameters/MemberId'
+      responses:
+        '200':
+          description: Départ enregistré
+
+  /members/{id}/payments:
+    post:
+      tags: [Paiements]
+      summary: Enregistrer des paiements d'un membre
+      operationId: createMemberPayments
+      parameters:
+        - $ref: '#/components/parameters/MemberId'
+>>>>>>> d7e79cd (Fourth commit)
       requestBody:
         required: true
         content:
           application/json:
             schema:
+<<<<<<< HEAD
               $ref: '#/components/schemas/PaymentRequest'
             example:
               memberId: "550e8400-e29b-41d4-a716-446655440000"
@@ -337,11 +668,20 @@ paths:
       responses:
         '200':
           description: Liste des paiements
+=======
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateMemberPaymentRequest'
+      responses:
+        '201':
+          description: Paiements enregistrés
+>>>>>>> d7e79cd (Fourth commit)
           content:
             application/json:
               schema:
                 type: array
                 items:
+<<<<<<< HEAD
                   $ref: '#/components/schemas/PaymentResponse'
 
   /members/{memberId}/payments:
@@ -375,6 +715,17 @@ paths:
       description: |
         Types disponibles : CASH, BANK, MOBILE_MONEY
         Une seule caisse (CASH) autorisée par collectivité.
+=======
+                  $ref: '#/components/schemas/MemberPaymentResponse'
+        '400':
+          description: Données invalides
+
+  # ========== COMPTES GÉNÉRAUX (déjà existants) ==========
+  /accounts:
+    post:
+      tags: [Comptes]
+      summary: Créer un compte
+>>>>>>> d7e79cd (Fourth commit)
       operationId: createAccount
       requestBody:
         required: true
@@ -382,10 +733,13 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/AccountRequest'
+<<<<<<< HEAD
             example:
               name: "Caisse Principale"
               type: "CASH"
               collectivityId: "550e8400-e29b-41d4-a716-446655440000"
+=======
+>>>>>>> d7e79cd (Fourth commit)
       responses:
         '201':
           description: Compte créé
@@ -393,12 +747,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AccountResponse'
+<<<<<<< HEAD
         '400':
           description: Erreur (ex: caisse déjà existante)
 
     get:
       tags:
         - Comptes
+=======
+    get:
+      tags: [Comptes]
+>>>>>>> d7e79cd (Fourth commit)
       summary: Lister tous les comptes
       operationId: findAllAccounts
       responses:
@@ -413,9 +772,14 @@ paths:
 
   /accounts/{id}:
     get:
+<<<<<<< HEAD
       tags:
         - Comptes
       summary: Obtenir un compte par son ID
+=======
+      tags: [Comptes]
+      summary: Obtenir un compte par ID
+>>>>>>> d7e79cd (Fourth commit)
       operationId: findAccountById
       parameters:
         - name: id
@@ -432,6 +796,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/AccountResponse'
         '404':
+<<<<<<< HEAD
           description: Compte non trouvé
 
 
@@ -441,6 +806,15 @@ paths:
         - Activités
       summary: Créer une activité
       description: Types disponibles : MANDATORY, EXCEPTIONAL
+=======
+          description: Non trouvé
+
+  # ========== ACTIVITÉS & PRÉSENCES (bonus) ==========
+  /activities:
+    post:
+      tags: [Activités]
+      summary: Créer une activité
+>>>>>>> d7e79cd (Fourth commit)
       operationId: createActivity
       requestBody:
         required: true
@@ -448,6 +822,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ActivityRequest'
+<<<<<<< HEAD
             example:
               title: "Assemblée Générale"
               description: "Assemblée générale annuelle"
@@ -466,6 +841,14 @@ paths:
       tags:
         - Activités
       summary: Lister toutes les activités
+=======
+      responses:
+        '201':
+          description: Activité créée
+    get:
+      tags: [Activités]
+      summary: Lister les activités
+>>>>>>> d7e79cd (Fourth commit)
       operationId: findAllActivities
       parameters:
         - name: type
@@ -475,7 +858,11 @@ paths:
             enum: [MANDATORY, EXCEPTIONAL]
       responses:
         '200':
+<<<<<<< HEAD
           description: Liste des activités
+=======
+          description: Liste
+>>>>>>> d7e79cd (Fourth commit)
           content:
             application/json:
               schema:
@@ -483,11 +870,17 @@ paths:
                 items:
                   $ref: '#/components/schemas/ActivityResponse'
 
+<<<<<<< HEAD
 
   /attendances:
     post:
       tags:
         - Présences
+=======
+  /attendances:
+    post:
+      tags: [Présences]
+>>>>>>> d7e79cd (Fourth commit)
       summary: Enregistrer une présence
       operationId: createAttendance
       requestBody:
@@ -496,6 +889,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/AttendanceRequest'
+<<<<<<< HEAD
             example:
               activityId: "880e8400-e29b-41d4-a716-446655440000"
               memberId: "550e8400-e29b-41d4-a716-446655440000"
@@ -513,6 +907,15 @@ paths:
     get:
       tags:
         - Présences
+=======
+      responses:
+        '201':
+          description: Présence enregistrée
+
+  /activities/{activityId}/attendances:
+    get:
+      tags: [Présences]
+>>>>>>> d7e79cd (Fourth commit)
       summary: Présences d'une activité
       operationId: findAttendancesByActivity
       parameters:
@@ -524,7 +927,11 @@ paths:
             format: uuid
       responses:
         '200':
+<<<<<<< HEAD
           description: Liste des présences
+=======
+          description: Liste
+>>>>>>> d7e79cd (Fourth commit)
           content:
             application/json:
               schema:
@@ -532,6 +939,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/AttendanceResponse'
 
+<<<<<<< HEAD
 
   /statistics/collectivities/{id}:
     get:
@@ -567,6 +975,16 @@ paths:
           schema:
             type: string
             format: uuid
+=======
+  # ========== STATISTIQUES MEMBRES (bonus) ==========
+  /statistics/members/{id}:
+    get:
+      tags: [Statistiques]
+      summary: Statistiques d'un membre
+      operationId: getMemberStats
+      parameters:
+        - $ref: '#/components/parameters/MemberId'
+>>>>>>> d7e79cd (Fourth commit)
       responses:
         '200':
           description: Statistiques du membre
@@ -576,6 +994,7 @@ paths:
                 $ref: '#/components/schemas/MemberStats'
 
 components:
+<<<<<<< HEAD
   schemas:
  
     CollectivityStatus:
@@ -733,6 +1152,165 @@ components:
           type: string
           maxLength: 100
           example: "Caisse Principale"
+=======
+  parameters:
+    CollectivityId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    MemberId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+
+  schemas:
+    # ========== Enums ==========
+    CollectivityStatus:
+      type: string
+      enum: [PENDING, ACTIVE, SUSPENDED]
+    MemberStatus:
+      type: string
+      enum: [ACTIVE, INACTIVE, SUSPENDED]
+    PaymentType:
+      type: string
+      enum: [MONTHLY, ANNUAL, EXCEPTIONAL]
+    AccountType:
+      type: string
+      enum: [CASH, BANK, MOBILE_MONEY]
+    ActivityType:
+      type: string
+      enum: [MANDATORY, EXCEPTIONAL]
+    Frequency:
+      type: string
+      enum: [WEEKLY, MONTHLY, ANNUALLY, PUNCTUALLY]
+    PaymentMode:
+      type: string
+      enum: [CASH, MOBILE_BANKING, BANK_TRANSFER]
+    Gender:
+      type: string
+      enum: [MALE, FEMALE]
+
+    # ========== Requêtes ==========
+    CollectivityRequest:
+      type: object
+      required: [location, members, federationApproval, structure]
+      properties:
+        location:
+          type: string
+        specialty:
+          type: string
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberIdentifier'
+        federationApproval:
+          type: boolean
+        structure:
+          $ref: '#/components/schemas/CreateCollectivityStructure'
+
+    CreateCollectivityStructure:
+      type: object
+      properties:
+        president:
+          $ref: '#/components/schemas/MemberIdentifier'
+        vicePresident:
+          $ref: '#/components/schemas/MemberIdentifier'
+        treasurer:
+          $ref: '#/components/schemas/MemberIdentifier'
+        secretary:
+          $ref: '#/components/schemas/MemberIdentifier'
+
+    CollectivityInformationRequest:
+      type: object
+      required: [number, name]
+      properties:
+        number:
+          type: string
+        name:
+          type: string
+
+    CreateMemberRequest:
+      type: object
+      required: [firstName, lastName, birthDate, phone, address, referees]
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        birthDate:
+          type: string
+          format: date
+        gender:
+          $ref: '#/components/schemas/Gender'
+        address:
+          type: string
+        profession:
+          type: string
+        phoneNumber:
+          type: string
+        email:
+          type: string
+        collectivityId:
+          type: string
+          format: uuid
+        referees:
+          type: array
+          items:
+            $ref: '#/components/schemas/SponsorRequest'
+
+    SponsorRequest:
+      type: object
+      required: [sponsorId, relationType]
+      properties:
+        sponsorId:
+          type: string
+          format: uuid
+        relationType:
+          type: string
+          enum: [FAMILY, FRIEND, COLLEAGUE, NEIGHBOR, OTHER]
+        relationDetails:
+          type: string
+
+    CreateMembershipFeeRequest:
+      type: object
+      required: [eligibleFrom, frequency, amount, label]
+      properties:
+        eligibleFrom:
+          type: string
+          format: date
+        frequency:
+          $ref: '#/components/schemas/Frequency'
+        amount:
+          type: number
+        label:
+          type: string
+
+    CreateMemberPaymentRequest:
+      type: object
+      required: [amount, accountCreditedIdentifier, paymentMode]
+      properties:
+        amount:
+          type: number
+        membershipFeeIdentifier:
+          type: string
+        accountCreditedIdentifier:
+          type: string
+        paymentMode:
+          $ref: '#/components/schemas/PaymentMode'
+
+    AccountRequest:
+      type: object
+      required: [name, type, collectivityId]
+      properties:
+        name:
+          type: string
+>>>>>>> d7e79cd (Fourth commit)
         type:
           $ref: '#/components/schemas/AccountType'
         collectivityId:
@@ -741,6 +1319,7 @@ components:
 
     ActivityRequest:
       type: object
+<<<<<<< HEAD
       required:
         - title
         - activityDate
@@ -758,6 +1337,17 @@ components:
           type: string
           format: date-time
           example: "2024-06-15T14:00:00"
+=======
+      required: [title, activityDate, type, collectivityId]
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        activityDate:
+          type: string
+          format: date-time
+>>>>>>> d7e79cd (Fourth commit)
         type:
           $ref: '#/components/schemas/ActivityType'
         collectivityId:
@@ -766,10 +1356,14 @@ components:
 
     AttendanceRequest:
       type: object
+<<<<<<< HEAD
       required:
         - activityId
         - memberId
         - present
+=======
+      required: [activityId, memberId, present]
+>>>>>>> d7e79cd (Fourth commit)
       properties:
         activityId:
           type: string
@@ -779,21 +1373,36 @@ components:
           format: uuid
         present:
           type: boolean
+<<<<<<< HEAD
           example: true
         justification:
           type: string
           example: null
 
   
+=======
+        justification:
+          type: string
+
+    # ========== Réponses ==========
+>>>>>>> d7e79cd (Fourth commit)
     CollectivityResponse:
       type: object
       properties:
         id:
           type: string
           format: uuid
+<<<<<<< HEAD
         name:
           type: string
         city:
+=======
+        number:
+          type: string
+        name:
+          type: string
+        location:
+>>>>>>> d7e79cd (Fourth commit)
           type: string
         specialty:
           type: string
@@ -804,10 +1413,17 @@ components:
           type: boolean
         status:
           $ref: '#/components/schemas/CollectivityStatus'
+<<<<<<< HEAD
         memberCount:
           type: integer
         activeMandatesCount:
           type: integer
+=======
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberResponse'
+>>>>>>> d7e79cd (Fourth commit)
 
     MemberResponse:
       type: object
@@ -824,6 +1440,11 @@ components:
         birthDate:
           type: string
           format: date
+<<<<<<< HEAD
+=======
+        gender:
+          $ref: '#/components/schemas/Gender'
+>>>>>>> d7e79cd (Fourth commit)
         email:
           type: string
         phone:
@@ -835,20 +1456,62 @@ components:
           format: date
         status:
           $ref: '#/components/schemas/MemberStatus'
+<<<<<<< HEAD
         seniorityDays:
           type: integer
+=======
+>>>>>>> d7e79cd (Fourth commit)
         collectivityId:
           type: string
           format: uuid
         collectivityName:
           type: string
+<<<<<<< HEAD
+=======
+        referees:
+          type: array
+          items:
+            $ref: '#/components/schemas/SponsorResponse'
+
+    SponsorResponse:
+      type: object
+      properties:
+>>>>>>> d7e79cd (Fourth commit)
         sponsorId:
           type: string
           format: uuid
         sponsorName:
           type: string
+<<<<<<< HEAD
 
     PaymentResponse:
+=======
+        relationType:
+          type: string
+        relationDetails:
+          type: string
+
+    MembershipFeeResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        eligibleFrom:
+          type: string
+          format: date
+        frequency:
+          $ref: '#/components/schemas/Frequency'
+        amount:
+          type: number
+        label:
+          type: string
+        status:
+          type: string
+          enum: [ACTIVE, INACTIVE]
+
+    MemberPaymentResponse:
+>>>>>>> d7e79cd (Fourth commit)
       type: object
       properties:
         id:
@@ -856,6 +1519,7 @@ components:
           format: uuid
         amount:
           type: number
+<<<<<<< HEAD
         type:
           $ref: '#/components/schemas/PaymentType'
         paymentDate:
@@ -865,16 +1529,164 @@ components:
           type: string
         description:
           type: string
+=======
+        paymentMode:
+          $ref: '#/components/schemas/PaymentMode'
+        accountCreditedId:
+          type: string
+          format: uuid
+        creationDate:
+          type: string
+          format: date
+
+    FinancialAccountResponse:
+      oneOf:
+        - $ref: '#/components/schemas/CashAccountResponse'
+        - $ref: '#/components/schemas/MobileBankingAccountResponse'
+        - $ref: '#/components/schemas/BankAccountResponse'
+
+    CashAccountResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [CASH]
+        amount:
+          type: number
+
+    MobileBankingAccountResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [MOBILE_MONEY]
+        holderName:
+          type: string
+        mobileBankingService:
+          type: string
+        mobileNumber:
+          type: string
+        amount:
+          type: number
+
+    BankAccountResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [BANK]
+        holderName:
+          type: string
+        bankName:
+          type: string
+        bankCode:
+          type: string
+        bankBranchCode:
+          type: string
+        bankAccountNumber:
+          type: string
+        bankAccountKey:
+          type: string
+        amount:
+          type: number
+
+    CollectivityTransactionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        creationDate:
+          type: string
+          format: date
+        amount:
+          type: number
+        paymentMode:
+          $ref: '#/components/schemas/PaymentMode'
+        accountCredited:
+          $ref: '#/components/schemas/FinancialAccountResponse'
+        memberDebited:
+          $ref: '#/components/schemas/MemberResponse'
+
+    CollectivityStatsResponse:
+      type: object
+      properties:
+        collectivityId:
+          type: string
+          format: uuid
+        collectivityName:
+          type: string
+        memberStats:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberPaymentStats'
+
+    MemberPaymentStats:
+      type: object
+      properties:
+>>>>>>> d7e79cd (Fourth commit)
         memberId:
           type: string
           format: uuid
         memberName:
           type: string
+<<<<<<< HEAD
         accountId:
           type: string
           format: uuid
         accountName:
           type: string
+=======
+        totalPaid:
+          type: number
+        unpaids:
+          type: number
+
+    FederationStatsResponse:
+      type: object
+      properties:
+        period:
+          type: string
+        upToDateStats:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectivityUpToDateStat'
+        newMembersStats:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectivityNewMembersStat'
+
+    CollectivityUpToDateStat:
+      type: object
+      properties:
+        collectivityId:
+          type: string
+          format: uuid
+        collectivityName:
+          type: string
+        upToDatePercentage:
+          type: number
+
+    CollectivityNewMembersStat:
+      type: object
+      properties:
+        collectivityId:
+          type: string
+          format: uuid
+        collectivityName:
+          type: string
+        newMembersCount:
+          type: integer
+>>>>>>> d7e79cd (Fourth commit)
 
     AccountResponse:
       type: object
@@ -916,10 +1728,13 @@ components:
           format: uuid
         collectivityName:
           type: string
+<<<<<<< HEAD
         attendanceCount:
           type: integer
         presentCount:
           type: integer
+=======
+>>>>>>> d7e79cd (Fourth commit)
 
     AttendanceResponse:
       type: object
@@ -930,8 +1745,11 @@ components:
         activityId:
           type: string
           format: uuid
+<<<<<<< HEAD
         activityTitle:
           type: string
+=======
+>>>>>>> d7e79cd (Fourth commit)
         memberId:
           type: string
           format: uuid
@@ -954,6 +1772,7 @@ components:
           type: integer
         activeMembers:
           type: integer
+<<<<<<< HEAD
         inactiveMembers:
           type: integer
         totalPayments:
@@ -967,10 +1786,17 @@ components:
         averageAttendanceRate:
           type: number
           format: double
+=======
+        averageAttendanceRate:
+          type: number
+        totalPayments:
+          type: number
+>>>>>>> d7e79cd (Fourth commit)
         paymentsByMonth:
           type: object
           additionalProperties:
             type: number
+<<<<<<< HEAD
         activitiesByMonth:
           type: object
           additionalProperties:
@@ -979,6 +1805,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MemberStats'
+=======
+>>>>>>> d7e79cd (Fourth commit)
 
     MemberStats:
       type: object
@@ -990,6 +1818,7 @@ components:
           type: string
         seniorityDays:
           type: integer
+<<<<<<< HEAD
         joinDate:
           type: string
           format: date
@@ -1023,6 +1852,32 @@ components:
           type: object
           additionalProperties:
             type: number
+=======
+        totalPayments:
+          type: number
+        activitiesAttended:
+          type: integer
+        attendanceRate:
+          type: number
+        mandateHistory:
+          type: array
+          items:
+            $ref: '#/components/schemas/MandateInfo'
+
+    MandateInfo:
+      type: object
+      properties:
+        roleName:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        isActive:
+          type: boolean
+>>>>>>> d7e79cd (Fourth commit)
 
     ErrorResponse:
       type: object
@@ -1038,7 +1893,14 @@ components:
           type: string
         path:
           type: string
+<<<<<<< HEAD
         validationErrors:
           type: object
           additionalProperties:
             type: string
+=======
+
+    # Utilitaire
+    MemberIdentifier:
+      type: string
+>>>>>>> d7e79cd (Fourth commit)
